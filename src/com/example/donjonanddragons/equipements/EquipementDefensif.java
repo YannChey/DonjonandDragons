@@ -5,6 +5,9 @@ public abstract class EquipementDefensif {
     private int level;
     private String name;
 
+    public String toString(){
+        return "Votre " + type + " sera " + name + " d'un niveau de : " + level;
+    }
     public String getName(){
         return name;
     }

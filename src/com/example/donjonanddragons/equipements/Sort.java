@@ -6,7 +6,9 @@ public class Sort extends EquipementOffensif{
         setType("Sort");
         setLevel(7);
     }
-    public String toString(){
-        return "Votre " + getType() + " sera " + getName() + " d'un niveau de : " + getLevel();
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

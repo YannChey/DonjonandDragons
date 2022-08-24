@@ -8,7 +8,8 @@ public class Arme extends EquipementOffensif{
         setType("Arme");
     }
 
-    public String toString(){
-        return "Votre " + getType() + " sera " + getName() + " d'un niveau de : " + getLevel();
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

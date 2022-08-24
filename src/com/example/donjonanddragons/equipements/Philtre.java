@@ -7,7 +7,8 @@ public class Philtre extends EquipementDefensif{
         setLevel(10);
     }
 
-    public String toString(){
-        return "Votre " + getType() + " sera " + getName() + " d'un niveau de : " + getLevel();
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
