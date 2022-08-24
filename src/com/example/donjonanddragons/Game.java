@@ -1,4 +1,6 @@
 package com.example.donjonanddragons;
+import com.example.donjonanddragons.personnages.Character;
+
 import java.util.Scanner;
 import java.lang.Math;
 

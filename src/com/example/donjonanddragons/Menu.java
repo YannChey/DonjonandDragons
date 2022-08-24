@@ -1,5 +1,11 @@
 package com.example.donjonanddragons;
 
+import com.example.donjonanddragons.equipements.EquipementDefensif;
+import com.example.donjonanddragons.equipements.EquipementOffensif;
+import com.example.donjonanddragons.personnages.Character;
+import com.example.donjonanddragons.personnages.Guerrier;
+import com.example.donjonanddragons.personnages.Magician;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -63,8 +69,8 @@ public class Menu {
                     if (choiceChangement().equals("1")) {
                         String name = getCharacterType();
                         perso1 = createCharacter(name);
-                        attack1 = new EquipementOffensif(name);
-                        defend1 = new EquipementDefensif(name);
+                        attack1 = perso1.getAttackObject();
+                        defend1 = perso1.getDefendObject();
                     } else if (choiceChangement().equals("2")) {
                         perso1.setName(defineNameCharacter());
                     }
@@ -90,11 +96,11 @@ public class Menu {
     }
 
     public Character createCharacter(String name) {
-        Character perso1 = new Character(name);
+        Character perso1;
         if (name.equals("warrior")) {
-            perso1 = new Guerrier(name);
-        } else if (name.equals("magician")) {
-            perso1 = new Magician(name);
+            perso1 = new Guerrier();
+        } else {
+            perso1 = new Magician();
         }
 //        Character perso1 = new Guerrier(name);
         return perso1;

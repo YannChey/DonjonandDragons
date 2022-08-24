@@ -1,27 +1,19 @@
-package com.example.donjonanddragons;
+package com.example.donjonanddragons.personnages;
 
-public class Character {
+import com.example.donjonanddragons.equipements.EquipementDefensif;
+import com.example.donjonanddragons.equipements.EquipementOffensif;
+
+public abstract class Character {
     private int power;
     private int life;
     private String name;
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
 
-    public Character() {
 
+    public String toString() {
+        return "Vous avez choisi le personnage : " + name  + ". Votre vie est de: " + life + ". Et votre puissance est de: " + power;
     }
-
-    public Character(String name) {
-//            this.attackObject = new EquipementOffensif(name);
-//            this.defendObject = new EquipementDefensif(name);
-//            if (name.equals("warrior")){
-//                Guerrier guerrier1 = new Guerrier(name);
-//            }
-//            else if(name.equals("magician")){
-//                Magician magician1 = new Magician(name);
-//            }
-    }
-
 
     public String getName() {
         return name;
