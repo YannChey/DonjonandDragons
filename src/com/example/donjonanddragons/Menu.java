@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 public class Menu {
     Scanner myObj = new Scanner(System.in);
-    public String getCharacterType(){
+
+    public String getCharacterType() {
 
         String name;
         System.out.println("Pour commencer, choisissez quel personnage vous souhaitez incarner entre le Magician ou le Warrior");
@@ -22,34 +23,34 @@ public class Menu {
         return name;
     }
 
-    public String defineNameCharacter(){
+    public String defineNameCharacter() {
         String characterName;
         System.out.println("Veuillez maintenant definir un nom pour votre heros");
         characterName = myObj.nextLine().toLowerCase();
         return characterName;
     }
 
-    public void displayWelcome(){
+    public void displayWelcome() {
         System.out.println("Bienvenue dans notre nouveau jeu Donjons et Dragons !");
     }
 
-    public String choiceMenu(){
+    public String choiceMenu() {
         String choiceMenu;
         System.out.println("Vous pouvez consulter votre personnage en tapant 1, changer de personnage ou de nom en tapant 2 et si tout est ok, ON ATTAQUE ! en tapant 3");
         choiceMenu = myObj.nextLine().toLowerCase();
         return choiceMenu;
     }
 
-    public String choiceChangement(){
+    public String choiceChangement() {
         String choiceChangement;
         System.out.println("1 pour changer de personnage, 2 pour changer de nom");
         choiceChangement = myObj.nextLine().toLowerCase();
         return choiceChangement;
     }
 
-    public void menuSelect(Character perso1, EquipementOffensif attack1, EquipementDefensif defend1){
+    public void menuSelect(Character perso1, EquipementOffensif attack1, EquipementDefensif defend1) {
         String choixUtilisateur;
-        do{
+        do {
             choixUtilisateur = choiceMenu();
             switch (choixUtilisateur) {
                 case "1":
@@ -61,10 +62,10 @@ public class Menu {
                     choiceChangement();
                     if (choiceChangement().equals("1")) {
                         String name = getCharacterType();
-                        perso1 = new Character(name);
+                        perso1 = createCharacter(name);
                         attack1 = new EquipementOffensif(name);
                         defend1 = new EquipementDefensif(name);
-                    } else if (choiceChangement().equals("2")){
+                    } else if (choiceChangement().equals("2")) {
                         perso1.setName(defineNameCharacter());
                     }
                     break;
@@ -75,17 +76,28 @@ public class Menu {
         } while (!choixUtilisateur.equals("3"));
     }
 
-    public void showStats(Character perso){
+    public void showStats(Character perso) {
         System.out.println(perso);
         System.out.println(perso.getAttackObject());
         System.out.println(perso.getDefendObject());
     }
 
-    public void changeName(Character perso){
+    public void changeName(Character perso) {
         String characterName = defineNameCharacter();
         perso.setName(characterName);
         System.out.println("Votre personnage s'appelle désormais : " + characterName);
         System.out.println(perso);
+    }
+
+    public Character createCharacter(String name) {
+        Character perso1 = new Character(name);
+        if (name.equals("warrior")) {
+            perso1 = new Guerrier(name);
+        } else if (name.equals("magician")) {
+            perso1 = new Magician(name);
+        }
+//        Character perso1 = new Guerrier(name);
+        return perso1;
     }
 
 

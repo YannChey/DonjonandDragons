@@ -19,7 +19,8 @@ public class Game {
     public void start(){
         menu.displayWelcome();
         String name = menu.getCharacterType();
-        perso1 = new Character(name);
+        perso1 = menu.createCharacter(name);
+//        perso1 = new Character(name);
         menu.showStats(perso1);
         menu.changeName(perso1);
         menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());

@@ -8,4 +8,7 @@ public class Magician extends Character{
         setLife(6);
         setPower(15);
     }
+    public String toString() {
+        return "Vous avez choisi le personnage : " + getName()  + ". Votre vie est de: " + getLife() + ". Et votre puissance est de: " + getPower();
+    }
 }
