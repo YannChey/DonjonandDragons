@@ -5,6 +5,9 @@ public class EquipementOffensif {
     private int level;
     private String name;
 
+    public EquipementOffensif(){
+
+    }
     public EquipementOffensif(String name){
         if (name.equals("warrior")) {
             this.type = "Arme";
@@ -33,4 +36,17 @@ public class EquipementOffensif {
     public int getLevel(){
         return level;
     }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public void setType(String type){
+        this.type = type;
+    }
+
+    public void setLevel(Integer level){
+        this.level = level;
+    }
+
 }

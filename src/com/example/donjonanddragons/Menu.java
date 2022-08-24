@@ -15,7 +15,7 @@ public class Menu {
         while (!name.equals("warrior") && !name.equals("magician")) {
             System.out.println("Error. You have to choose a hero between Warrior or Magician");
             try {
-                name = myObj.nextLine();
+                name = myObj.nextLine().toLowerCase();
             } catch (InputMismatchException e) {
             }
         }
@@ -99,7 +99,6 @@ public class Menu {
 //        Character perso1 = new Guerrier(name);
         return perso1;
     }
-
 
 }
 
