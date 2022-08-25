@@ -1,9 +1,13 @@
 package com.example.donjonanddragons;
 
+import com.example.donjonanddragons.cases.Case;
+import com.example.donjonanddragons.cases.CaseCaisse;
+import com.example.donjonanddragons.cases.CaseEnnemi;
+import com.example.donjonanddragons.cases.CaseVide;
+import com.example.donjonanddragons.equipements.Arme;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;
 import com.example.donjonanddragons.personnages.Character;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.lang.Math;
@@ -16,19 +20,18 @@ public class Game {
     Scanner myObj = new Scanner(System.in);
     private Menu menu;
     private Character perso1;
-    //    ArrayList plateau = new ArrayList(64);
-    ArrayList plateau;
-    ArrayList positionJoueur;
+    ArrayList<Case> plateau = new ArrayList<>();
+    int positionJoueur;
 
     public Game() {
         this.position = 1;
-        menu = new Menu();
+        this.menu = new Menu();
+        plateau.add(new CaseVide());
+        plateau.add(new CaseEnnemi());
+        plateau.add(new CaseCaisse());
     }
 
-    public ArrayList plateau(){
-        plateau = new ArrayList(64);
-        return plateau;
-    }
+
 
     public void start() {
         menu.displayWelcome();

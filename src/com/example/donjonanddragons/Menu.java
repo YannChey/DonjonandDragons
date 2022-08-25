@@ -102,7 +102,6 @@ public class Menu {
         } else {
             perso1 = new Magician();
         }
-//        Character perso1 = new Guerrier(name);
         return perso1;
     }
 

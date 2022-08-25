@@ -10,6 +10,13 @@ public abstract class Character {
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
 
+    public Character(int power, int life, String name, EquipementOffensif attackObject, EquipementDefensif defendObject) {
+        this.power = power;
+        this.life = life;
+        this.name = name;
+        this.attackObject = attackObject;
+        this.defendObject = defendObject;
+    }
 
     public String toString() {
         return "Vous avez choisi le personnage : " + name  + ". Votre vie est de: " + life + ". Et votre puissance est de: " + power;

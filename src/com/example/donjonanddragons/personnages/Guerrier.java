@@ -5,11 +5,12 @@ import com.example.donjonanddragons.equipements.Bouclier;
 
 public class Guerrier extends Character{
      public Guerrier(){
-         setAttackObject(new Arme());
-         setDefendObject(new Bouclier());
-         setName("Warrior");
-         setLife(10);
-         setPower(10);
+         super(10,10,"Warrior",new Arme(),new Bouclier());
+//         setAttackObject(new Arme());
+//         setDefendObject(new Bouclier());
+//         setName("Warrior");
+//         setLife(10);
+//         setPower(10);
      }
 
     @Override

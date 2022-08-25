@@ -5,6 +5,12 @@ public abstract class EquipementOffensif {
     private int level;
     private String name;
 
+    protected EquipementOffensif(String type, int level, String name) {
+        this.type = type;
+        this.level = level;
+        this.name = name;
+    }
+
     public String toString(){
         return "Votre " + type + " sera " + name + " d'un niveau de : " + level;
     }
