@@ -21,17 +21,19 @@ public class Game {
     private Menu menu;
     private Character perso1;
     ArrayList<Case> plateau = new ArrayList<>();
-    int positionJoueur;
 
     public Game() {
         this.position = 1;
         this.menu = new Menu();
+//        for(int i=0;i<64;i++){
+//            plateau.add(new CaseVide());
+//        }
+        plateau.add(new CaseVide());
         plateau.add(new CaseVide());
         plateau.add(new CaseEnnemi());
         plateau.add(new CaseCaisse());
+        plateau.add(new CaseVide());
     }
-
-
 
     public void start() {
         menu.displayWelcome();
@@ -52,24 +54,24 @@ public class Game {
             this.position = movePlayer();
         } catch(PersonnageHorsPlateauException e){
             e.printStackTrace();
-            this.position=64;
+            this.position = plateau.toArray().length;
         }
     }
 
     public boolean isOver() {
-        return this.position == 64;
+        return this.position == plateau.toArray().length;
     }
 
     public int movePlayer() throws PersonnageHorsPlateauException {
         int throughDices;
-        throughDices = (int) (Math.random() * range) + min;
+//        throughDices = (int) (Math.random() * range) + min;
+        throughDices = 1;
         int new_position = this.position + throughDices;
-        if (new_position <= 64) {
-            System.out.println("Le resultat de votre lancer de des est : " + throughDices + ". Votre nouvelle position est : " + new_position + "/64");
+        if (new_position <= plateau.toArray().length) {
+            System.out.println("Le resultat de votre lancer de des est : " + throughDices + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
+            plateau.get(new_position-1).aEvent();
         } else {
-//            new_position = 64;
             throw new PersonnageHorsPlateauException();
-//            System.out.println("Le resultat de votre lancer de des est : " + throughDices + ". Votre nouvelle position est : " + new_position + "/64");
         }
         return new_position;
     }
@@ -85,7 +87,7 @@ public class Game {
 
     public void end() {
         int choiceEnd;
-        System.out.println("Bravo ! Vous avez gagnés !");
+        System.out.println("Bravo ! Vous avez gagné !");
         System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
         choiceEnd = myObj.nextInt();
         if (choiceEnd == 1) {
@@ -102,6 +104,9 @@ public class Game {
             this.position = 1;
             end();
         }
+    }
+    public void playEvent(){
+        Case cases;
     }
 }
 
