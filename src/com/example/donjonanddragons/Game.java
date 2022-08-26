@@ -1,16 +1,11 @@
 package com.example.donjonanddragons;
 
-import com.example.donjonanddragons.cases.Case;
-import com.example.donjonanddragons.cases.CaseCaisse;
-import com.example.donjonanddragons.cases.CaseEnnemi;
-import com.example.donjonanddragons.cases.CaseVide;
-import com.example.donjonanddragons.equipements.Arme;
+import com.example.donjonanddragons.cases.*;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;
 import com.example.donjonanddragons.personnages.Character;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.lang.Math;
 
 public class Game {
     private int max = 6;
@@ -20,7 +15,7 @@ public class Game {
     Scanner myObj = new Scanner(System.in);
     private Menu menu;
     private Character perso1;
-    ArrayList<Case> plateau = new ArrayList<>();
+    private ArrayList<Case> plateau = new ArrayList<>();
 
     public Game() {
         this.position = 1;
@@ -28,9 +23,15 @@ public class Game {
 //        for(int i=0;i<64;i++){
 //            plateau.add(new CaseVide());
 //        }
+        generateBoard();
+    }
+
+    private void generateBoard() {
+        plateau.clear();
         plateau.add(new CaseVide());
         plateau.add(new CaseVide());
         plateau.add(new CaseEnnemi());
+        plateau.add(new CaseArme());
         plateau.add(new CaseCaisse());
         plateau.add(new CaseVide());
     }
@@ -82,31 +83,31 @@ public class Game {
             next_turn();
         } while (!isOver());
         this.position = 1;
+        generateBoard();
         end();
     }
 
-    public void end() {
+    public void end(){
         int choiceEnd;
         System.out.println("Bravo ! Vous avez gagné !");
         System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
         choiceEnd = myObj.nextInt();
-        if (choiceEnd == 1) {
-            do {
-                next_turn();
-            } while (!isOver());
-            this.position = 1;
-            end();
-        } else if (choiceEnd == 2) {
-            menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
-            do {
-                next_turn();
-            } while (!isOver());
-            this.position = 1;
-            end();
-        }
-    }
-    public void playEvent(){
-        Case cases;
+            if (choiceEnd == 1) {
+                do {
+                    next_turn();
+                } while (!isOver());
+                this.position = 1;
+                generateBoard();
+                end();
+            } else if (choiceEnd == 2) {
+                menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
+                do {
+                    next_turn();
+                } while (!isOver());
+                this.position = 1;
+                generateBoard();
+                end();
+            }
     }
 }
 

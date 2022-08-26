@@ -1,7 +1,7 @@
 package com.example.donjonanddragons.personnages;
 
-import com.example.donjonanddragons.equipements.EquipementDefensif;
-import com.example.donjonanddragons.equipements.EquipementOffensif;
+import com.example.donjonanddragons.equipements.armes.EquipementDefensif;
+import com.example.donjonanddragons.equipements.armes.EquipementOffensif;
 
 public abstract class Character {
     private int power;

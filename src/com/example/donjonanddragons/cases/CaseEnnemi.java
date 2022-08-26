@@ -14,11 +14,11 @@ public class CaseEnnemi extends Case{
     public Ennemi ennemiRace(){
         Ennemi ennemi;
         int throughDices;
-        throughDices = (int) (Math.random() * 6) + 1;
-        if(throughDices < 4){
+        throughDices = (int) (Math.random() * 100) + 1;
+        if(throughDices < 40){
             ennemi = new Gobelin();
         }
-        else if(throughDices < 6){
+        else if(throughDices < 75){
             ennemi = new Sorcier();
         }else{
             ennemi = new Dragon();

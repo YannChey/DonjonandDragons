@@ -1,8 +1,8 @@
-package com.example.donjonanddragons.equipements;
+package com.example.donjonanddragons.equipements.armes;
 
 public class Sort extends EquipementOffensif{
     public Sort(){
-        super("Sort",7,"Une boule de feu");
+        super("Sort",7,"une boule de feu");
     }
 
     @Override

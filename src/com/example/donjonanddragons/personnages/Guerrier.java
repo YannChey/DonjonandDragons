@@ -1,7 +1,7 @@
 package com.example.donjonanddragons.personnages;
 
-import com.example.donjonanddragons.equipements.Arme;
-import com.example.donjonanddragons.equipements.Bouclier;
+import com.example.donjonanddragons.equipements.armes.Arme;
+import com.example.donjonanddragons.equipements.armes.Bouclier;
 
 public class Guerrier extends Character{
      public Guerrier(){

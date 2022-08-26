@@ -1,4 +1,4 @@
-package com.example.donjonanddragons.equipements;
+package com.example.donjonanddragons.equipements.armes;
 
 public class Philtre extends EquipementDefensif{
     public Philtre(){

@@ -1,6 +1,6 @@
-package com.example.donjonanddragons.equipements;
+package com.example.donjonanddragons.equipements.armes;
 
-public class Bouclier extends EquipementDefensif{
+public class Bouclier extends EquipementDefensif {
     public Bouclier(){
         super("Defense",8,"Bouclier");
     }

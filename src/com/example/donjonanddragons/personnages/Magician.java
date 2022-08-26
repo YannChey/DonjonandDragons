@@ -1,9 +1,7 @@
 package com.example.donjonanddragons.personnages;
 
-import com.example.donjonanddragons.equipements.Arme;
-import com.example.donjonanddragons.equipements.Bouclier;
-import com.example.donjonanddragons.equipements.Philtre;
-import com.example.donjonanddragons.equipements.Sort;
+import com.example.donjonanddragons.equipements.armes.Philtre;
+import com.example.donjonanddragons.equipements.armes.Sort;
 
 public class Magician extends Character{
     public Magician(){
