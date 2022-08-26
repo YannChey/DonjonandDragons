@@ -3,14 +3,14 @@ package com.example.donjonanddragons.personnages;
 import com.example.donjonanddragons.equipements.armes.EquipementDefensif;
 import com.example.donjonanddragons.equipements.armes.EquipementOffensif;
 
-public abstract class Character {
+public abstract class CharacterPlayer {
     private int power;
     private int life;
     private String name;
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
 
-    public Character(int power, int life, String name, EquipementOffensif attackObject, EquipementDefensif defendObject) {
+    public CharacterPlayer(int power, int life, String name, EquipementOffensif attackObject, EquipementDefensif defendObject) {
         this.power = power;
         this.life = life;
         this.name = name;

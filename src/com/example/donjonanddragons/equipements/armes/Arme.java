@@ -1,9 +1,9 @@
 package com.example.donjonanddragons.equipements.armes;
 
-public class Arme extends EquipementOffensif {
+public abstract class Arme extends EquipementOffensif {
 
-    public Arme(){
-        super("Arme",5,"epee");
+    public Arme(int level, String name){
+        super("Arme",level,name);
     }
 
     @Override

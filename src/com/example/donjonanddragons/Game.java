@@ -2,7 +2,7 @@ package com.example.donjonanddragons;
 
 import com.example.donjonanddragons.cases.*;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;
-import com.example.donjonanddragons.personnages.Character;
+import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -14,7 +14,7 @@ public class Game {
     private int position;
     Scanner myObj = new Scanner(System.in);
     private Menu menu;
-    private Character perso1;
+    private CharacterPlayer perso1;
     private ArrayList<Case> plateau = new ArrayList<>();
 
     public Game() {

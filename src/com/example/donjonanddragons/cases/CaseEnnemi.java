@@ -4,6 +4,7 @@ import com.example.donjonanddragons.ennemis.Dragon;
 import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.ennemis.Gobelin;
 import com.example.donjonanddragons.ennemis.Sorcier;
+import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 public class CaseEnnemi extends Case{
     Ennemi ennemi;
@@ -30,5 +31,10 @@ public class CaseEnnemi extends Case{
     public void aEvent() {
         System.out.println("Un ennemi est present ici !");
         System.out.println(this.ennemi);
+    }
+
+    @Override
+    public void interaction(CharacterPlayer character) {
+
     }
 }

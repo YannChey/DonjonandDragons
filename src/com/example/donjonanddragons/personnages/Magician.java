@@ -1,11 +1,11 @@
 package com.example.donjonanddragons.personnages;
 
+import com.example.donjonanddragons.equipements.armes.FireBall;
 import com.example.donjonanddragons.equipements.armes.Philtre;
-import com.example.donjonanddragons.equipements.armes.Sort;
 
-public class Magician extends Character{
+public class Magician extends CharacterPlayer {
     public Magician(){
-        super(15,6,"Magician",new Sort(),new Philtre());
+        super(15,6,"Magician",new FireBall(),new Philtre());
 //        setAttackObject(new Sort());
 //        setDefendObject(new Philtre());
 //        setName("Magician");

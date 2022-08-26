@@ -1,8 +1,8 @@
 package com.example.donjonanddragons.equipements.armes;
 
-public class Eclairs extends Sort{
-    public Eclairs(){
-
+public class Eclair extends Sort{
+    public Eclair(){
+        super(2,"eclair");
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.example.donjonanddragons;
 
 import com.example.donjonanddragons.equipements.armes.EquipementDefensif;
 import com.example.donjonanddragons.equipements.armes.EquipementOffensif;
-import com.example.donjonanddragons.personnages.Character;
+import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
@@ -54,7 +54,7 @@ public class Menu {
         return choiceChangement;
     }
 
-    public void menuSelect(Character perso1, EquipementOffensif attack1, EquipementDefensif defend1) {
+    public void menuSelect(CharacterPlayer perso1, EquipementOffensif attack1, EquipementDefensif defend1) {
         String choixUtilisateur;
         do {
             choixUtilisateur = choiceMenu();
@@ -82,21 +82,21 @@ public class Menu {
         } while (!choixUtilisateur.equals("3"));
     }
 
-    public void showStats(Character perso) {
+    public void showStats(CharacterPlayer perso) {
         System.out.println(perso);
         System.out.println(perso.getAttackObject());
         System.out.println(perso.getDefendObject());
     }
 
-    public void changeName(Character perso) {
+    public void changeName(CharacterPlayer perso) {
         String characterName = defineNameCharacter();
         perso.setName(characterName);
         System.out.println("Votre personnage s'appelle désormais : " + characterName);
         System.out.println(perso);
     }
 
-    public Character createCharacter(String name) {
-        Character perso1;
+    public CharacterPlayer createCharacter(String name) {
+        CharacterPlayer perso1;
         if (name.equals("warrior")) {
             perso1 = new Guerrier();
         } else {

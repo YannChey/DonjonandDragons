@@ -6,26 +6,16 @@ import com.example.donjonanddragons.ennemis.Sorcier;
 
 public class Potion {
     private int level;
+    private String name;
 
-    public Potion(){
-
-    }
-
-    public int wichPotion(){
-        int throughDices;
-        throughDices = (int) (Math.random() * 6) + 1;
-        if(throughDices <= 4){
-            this.level = 2;
-        }
-        else {
-            this.level = 5;
-        }
-        return this.level;
+    public Potion(int level, String name){
+        this.level = level;
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "La potion est de niveau : " + wichPotion();
+        return "Vous avez trouve une potion : "+ name + " qui est de niveau : " + level;
     }
 
     public int getLevel() {

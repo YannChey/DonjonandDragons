@@ -12,7 +12,7 @@ public abstract class EquipementOffensif {
     }
 
     public String toString(){
-        return "Votre " + type + " sera " + name + " d'un niveau de : " + level;
+        return "Votre " + type + " est un " + name + " d'un niveau de : " + level;
     }
 
     public String getName(){
