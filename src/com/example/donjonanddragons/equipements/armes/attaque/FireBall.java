@@ -1,4 +1,4 @@
-package com.example.donjonanddragons.equipements.armes;
+package com.example.donjonanddragons.equipements.armes.attaque;
 
 public class FireBall extends Sort{
     public FireBall(){

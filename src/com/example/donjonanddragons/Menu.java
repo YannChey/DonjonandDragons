@@ -1,11 +1,10 @@
 package com.example.donjonanddragons;
 
-import com.example.donjonanddragons.equipements.armes.EquipementDefensif;
-import com.example.donjonanddragons.equipements.armes.EquipementOffensif;
+import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
+import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
-import java.io.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

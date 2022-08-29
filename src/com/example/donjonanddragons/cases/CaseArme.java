@@ -1,6 +1,6 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.equipements.armes.*;
+import com.example.donjonanddragons.equipements.armes.attaque.*;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;

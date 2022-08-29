@@ -2,13 +2,12 @@ package com.example.donjonanddragons;
 
 import com.example.donjonanddragons.cases.*;
 import com.example.donjonanddragons.ennemis.Dragon;
-import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.ennemis.Gobelin;
 import com.example.donjonanddragons.ennemis.Sorcier;
-import com.example.donjonanddragons.equipements.armes.Eclair;
-import com.example.donjonanddragons.equipements.armes.Epee;
-import com.example.donjonanddragons.equipements.armes.FireBall;
-import com.example.donjonanddragons.equipements.armes.Massue;
+import com.example.donjonanddragons.equipements.armes.attaque.Eclair;
+import com.example.donjonanddragons.equipements.armes.attaque.Epee;
+import com.example.donjonanddragons.equipements.armes.attaque.FireBall;
+import com.example.donjonanddragons.equipements.armes.attaque.Massue;
 import com.example.donjonanddragons.equipements.potions.BigPotion;
 import com.example.donjonanddragons.equipements.potions.StandardPotion;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;

@@ -1,4 +1,4 @@
-package com.example.donjonanddragons.equipements.armes;
+package com.example.donjonanddragons.equipements.armes.defense;
 
 public class Bouclier extends EquipementDefensif {
     public Bouclier(){

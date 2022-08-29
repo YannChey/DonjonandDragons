@@ -1,4 +1,4 @@
-package com.example.donjonanddragons.equipements.armes;
+package com.example.donjonanddragons.equipements.armes.attaque;
 
 public abstract class EquipementOffensif {
     private String type;
