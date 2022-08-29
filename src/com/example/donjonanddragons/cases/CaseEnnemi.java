@@ -15,11 +15,11 @@ public class CaseEnnemi extends Case{
     public Ennemi ennemiRace(){
         Ennemi ennemi;
         int throughDices;
-        throughDices = (int) (Math.random() * 100) + 1;
-        if(throughDices < 40){
+        throughDices = (int) (Math.random() * 24) + 1;
+        if(throughDices < 11){
             ennemi = new Gobelin();
         }
-        else if(throughDices < 75){
+        else if(throughDices < 21){
             ennemi = new Sorcier();
         }else{
             ennemi = new Dragon();
@@ -35,6 +35,6 @@ public class CaseEnnemi extends Case{
 
     @Override
     public void interaction(CharacterPlayer character) {
-
+        System.out.println("C'est l'heure du combat !!!");
     }
 }

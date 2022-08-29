@@ -12,6 +12,10 @@ import java.util.Scanner;
 public class Menu {
     Scanner myObj = new Scanner(System.in);
 
+    public void displayWelcome() {
+        System.out.println("Bienvenue dans notre nouveau jeu Donjons et Dragons !");
+    }
+
     public String getCharacterType() {
 
         String name;
@@ -29,15 +33,27 @@ public class Menu {
         return name;
     }
 
+    public CharacterPlayer createCharacter(String name) {
+        CharacterPlayer perso1;
+        if (name.equals("warrior")) {
+            perso1 = new Guerrier();
+        } else {
+            perso1 = new Magician();
+        }
+        return perso1;
+    }
+
+    public void displayCharacter(CharacterPlayer perso1){
+        showStats(perso1);
+        changeName(perso1);
+        menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
+    }
+
     public String defineNameCharacter() {
         String characterName;
         System.out.println("Veuillez maintenant definir un nom pour votre heros");
         characterName = myObj.nextLine().toLowerCase();
         return characterName;
-    }
-
-    public void displayWelcome() {
-        System.out.println("Bienvenue dans notre nouveau jeu Donjons et Dragons !");
     }
 
     public String choiceMenu() {
@@ -93,16 +109,6 @@ public class Menu {
         perso.setName(characterName);
         System.out.println("Votre personnage s'appelle désormais : " + characterName);
         System.out.println(perso);
-    }
-
-    public CharacterPlayer createCharacter(String name) {
-        CharacterPlayer perso1;
-        if (name.equals("warrior")) {
-            perso1 = new Guerrier();
-        } else {
-            perso1 = new Magician();
-        }
-        return perso1;
     }
 
 }

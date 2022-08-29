@@ -14,8 +14,8 @@ public class CaseCaisse extends Case{
     public Potion givePotion(){
         int throughDices;
         Potion potion;
-        throughDices = (int) (Math.random() * 6) + 1;
-        if(throughDices <= 4){
+        throughDices = (int) (Math.random() * 8) + 1;
+        if(throughDices <= 6){
             potion = new StandardPotion();
         }
         else {
@@ -31,6 +31,10 @@ public class CaseCaisse extends Case{
 
     @Override
     public void interaction(CharacterPlayer character) {
-
+        if (character.getLife() < 15){
+            character.setLife(Math.min(character.getLife() + this.potion.getLevel(), 15));
+        }else{
+            System.out.println("Votre vie est deja au maximum");
+        }
     }
 }
