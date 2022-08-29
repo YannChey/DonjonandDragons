@@ -7,8 +7,9 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 public class CaseCaisse extends Case{
     private Potion potion;
-    public CaseCaisse(){
-        this.potion = this.givePotion();
+    public CaseCaisse(Potion potion){
+//        this.potion = this.givePotion();
+        this.potion = potion;
     }
 
     public Potion givePotion(){

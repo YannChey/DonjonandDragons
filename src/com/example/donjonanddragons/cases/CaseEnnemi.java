@@ -8,8 +8,8 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 public class CaseEnnemi extends Case{
     Ennemi ennemi;
-    public CaseEnnemi(){
-        this.ennemi = this.ennemiRace();
+    public CaseEnnemi(Ennemi ennemiRace){
+        this.ennemi = ennemiRace;
     }
 
     public Ennemi ennemiRace(){

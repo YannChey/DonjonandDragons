@@ -7,8 +7,9 @@ import com.example.donjonanddragons.personnages.Magician;
 
 public class CaseArme extends Case{
     private EquipementOffensif weapon;
-    public CaseArme(){
-        this.weapon = this.weapon();
+    public CaseArme(EquipementOffensif arme){
+//        this.weapon = this.weapon();
+        this.weapon = arme;
     }
 
     public EquipementOffensif weapon(){
@@ -36,18 +37,25 @@ public class CaseArme extends Case{
     @Override
     public void interaction(CharacterPlayer character) {
         if (character instanceof Guerrier guerrier){
-            if(this.weapon.getType().equals("Arme")&& !this.weapon.getType().equals(guerrier.getAttackObject().getType())){
+            if(this.weapon.getType().equals("Arme")&& !this.weapon.getName().equals(guerrier.getAttackObject().getName())){
                 guerrier.setAttackObject(this.weapon);
-            }else if(this.weapon.getType().equals(guerrier.getAttackObject().getType())){
+            }else if(this.weapon.getName().equals(guerrier.getAttackObject().getName())){
+                System.out.println(this.weapon.getName());
+                System.out.println(guerrier.getAttackObject().getType());
                 System.out.println("Vous etes deja equipe de cette arme");
             }
             else{
                 System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
             }
         }else if (character instanceof Magician magician){
-            if(this.weapon.getType().equals("Sort")){
+            if(this.weapon.getType().equals("Sort")&& !this.weapon.getName().equals(magician.getAttackObject().getName())){
                 magician.setAttackObject(this.weapon);
-            }else{
+            }else if(this.weapon.getName().equals(magician.getAttackObject().getName())){
+                System.out.println(this.weapon.getName());
+                System.out.println(magician.getAttackObject().getType());
+                System.out.println("Vous etes deja equipe de cette arme");
+            }
+            else{
                 System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
             }
         }

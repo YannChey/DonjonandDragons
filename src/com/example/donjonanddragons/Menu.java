@@ -5,15 +5,19 @@ import com.example.donjonanddragons.equipements.armes.EquipementOffensif;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
+import java.io.*;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
     Scanner myObj = new Scanner(System.in);
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_BLUE = "\u001B[34m";
 
     public void displayWelcome() {
-        System.out.println("Bienvenue dans notre nouveau jeu Donjons et Dragons !");
+        System.out.println(ANSI_RED + "Bienvenue dans notre nouveau jeu Donjons et Dragons !" + ANSI_RESET);
     }
 
     public String getCharacterType() {
@@ -23,7 +27,7 @@ public class Menu {
         name = myObj.nextLine().toLowerCase();
 
         while (!name.equals("warrior") && !name.equals("magician")) {
-            System.out.println("Error. You have to choose a hero between Warrior or Magician");
+            System.out.println(ANSI_RED + "Error. You have to choose a hero between Warrior or Magician"+ ANSI_RESET);
             try {
                 name = myObj.nextLine().toLowerCase();
             } catch (InputMismatchException e) {
@@ -58,7 +62,7 @@ public class Menu {
 
     public String choiceMenu() {
         String choiceMenu;
-        System.out.println("Vous pouvez consulter votre personnage en tapant 1, changer de personnage ou de nom en tapant 2 et si tout est ok, ON ATTAQUE ! en tapant 3");
+        System.out.println(ANSI_BLUE + "Vous pouvez consulter votre personnage en tapant 1, changer de personnage ou de nom en tapant 2 et si tout est ok, ON ATTAQUE ! en tapant 3" + ANSI_RESET);
         choiceMenu = myObj.nextLine().toLowerCase();
         return choiceMenu;
     }
