@@ -6,6 +6,10 @@ import com.example.donjonanddragons.ennemis.Gobelin;
 import com.example.donjonanddragons.ennemis.Sorcier;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Scanner;
+
 public class CaseEnnemi extends Case{
     Ennemi ennemi;
     public CaseEnnemi(Ennemi ennemiRace){
@@ -36,5 +40,29 @@ public class CaseEnnemi extends Case{
     @Override
     public void interaction(CharacterPlayer character) {
         System.out.println("C'est l'heure du combat !!!");
+        Scanner attack = new Scanner(System.in);
+        System.out.println("Attaquez le mechant ! (cliquez sur enter)");
+        attack.nextLine();
+        ennemi.setLife(ennemi.getLife()-(character.getPower()+character.getAttackObject().getLevel()));
+        System.out.println(ennemi.getLife());
+        if(ennemi.getLife()<=0){
+            System.out.println("Il reste : " + ennemi.getLife() + " PV a votre ennemi");
+            System.out.println("Bravo vous avez vaincu l'ennemi !");
+        }else{
+            System.out.println("Il reste : " + ennemi.getLife() + " PV a votre ennemi");
+            System.out.println("L'ennemi vous attaque ! ");
+            character.setLife(character.getLife() - ennemi.getAttack());
+            System.out.println("L'ennemi vous a attaque, il vous reste : " + character.getLife() + " PV");
+            System.out.println("L'ennemi s'enfui en vous ayant mis une belle pichenette");
+        }
+    }
+
+    public Ennemi getEnnemi() {
+        return ennemi;
+    }
+
+    @Override
+    public Optional<Object> getContent() {
+        return Optional.of(this.ennemi);
     }
 }

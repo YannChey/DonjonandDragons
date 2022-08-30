@@ -3,6 +3,9 @@ package com.example.donjonanddragons.cases;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import org.w3c.dom.events.Event;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 public class CaseVide extends Case{
 
     public CaseVide() {
@@ -21,5 +24,10 @@ public class CaseVide extends Case{
 
     public void aEvent(){
         System.out.println("Il ne se passe rien ici!");
+    }
+
+    @Override
+    public Optional<Object> getContent() {
+        return Optional.empty();
     }
 }

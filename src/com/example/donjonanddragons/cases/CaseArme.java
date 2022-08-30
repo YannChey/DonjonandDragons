@@ -5,6 +5,9 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 public class CaseArme extends Case{
     private EquipementOffensif weapon;
     public CaseArme(EquipementOffensif arme){
@@ -31,7 +34,7 @@ public class CaseArme extends Case{
     @Override
     public void aEvent() {
         System.out.println("Vous avez trouve une arme ! Celle-ci est : " + weapon.getName());
-        System.out.println(this.weapon);
+//        System.out.println(this.weapon);
     }
 
     @Override
@@ -59,5 +62,10 @@ public class CaseArme extends Case{
                 System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
             }
         }
+    }
+
+    @Override
+    public Optional<Object> getContent() {
+        return Optional.of(this.weapon);
     }
 }

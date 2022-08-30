@@ -26,9 +26,11 @@ public class Game {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
+    GameState state = GameState.WELCOME;
+    boolean continuePlay = true;
 
     public Game() {
-        this.position = 1;
+        this.position = 2;
         this.menu = new Menu();
         generateBoard();
     }
@@ -75,7 +77,6 @@ public class Game {
     }
 
     public void start() {
-        menu.displayWelcome();
         String name = menu.getCharacterType();
         perso1 = menu.createCharacter(name);
         menu.displayCharacter(perso1);
@@ -84,7 +85,7 @@ public class Game {
             System.out.println(aCase.getClass().getName());
         }
         System.out.println("C'est parti ! Votre objectif sera d'atteindre la case 64. Bonne chance !");
-        System.out.println(ANSI_RED + "Pour commencer, veuillez lancer les des (cliquez sur enter)" + ANSI_RESET);
+        this.state = GameState.JEU;
     }
 
     public void next_turn() {
@@ -96,6 +97,7 @@ public class Game {
         } catch(PersonnageHorsPlateauException e){
             e.printStackTrace();
             this.position = plateau.toArray().length;
+            this.state = GameState.FIN;
         }
     }
 
@@ -104,7 +106,8 @@ public class Game {
         int min = 1;
         int max = 6;
         int range = max - min + 1;
-        throughDices = (int) (Math.random() * range) + min;
+//        throughDices = (int) (Math.random() * range) + min;
+        throughDices = 31;
 //        throughDices = 1;
         int new_position = this.position + throughDices;
         if (new_position <= plateau.toArray().length) {
@@ -112,25 +115,31 @@ public class Game {
             Case currentCase = plateau.get(new_position-1);
             currentCase.aEvent();
             currentCase.interaction(perso1);
+            if(currentCase.getContent().isPresent()){
+                plateau.set(new_position-1, new CaseVide());
+            }
         } else {
             throw new PersonnageHorsPlateauException();
         }
         return new_position;
     }
 
-    public boolean isOver() {
-        return this.position == plateau.toArray().length;
-    }
+//    public boolean isOver() {
+//        return this.position == plateau.toArray().length;
+//    }
 
-    public void gameDevelopment() {
-        start();
-        do {
-            next_turn();
-        } while (!isOver());
-        this.position = 1;
-        generateBoard();
-        end();
-    }
+//    public void gameDevelopment() {
+//        start();
+//        do {
+//            next_turn();
+//        } while (!isOver());
+//        for (Case aCase : plateau) {
+//            System.out.println(aCase.getClass().getName());
+//        }
+//        this.position = 1;
+//        generateBoard();
+//        end();
+//    }
 
     public void end(){
         int choiceEnd;
@@ -139,20 +148,46 @@ public class Game {
         choiceEnd = myObj.nextInt();
             if (choiceEnd == 1) {
                 generateBoard();
-                do {
-                    next_turn();
-                } while (!isOver());
+                this.state= GameState.JEU;
+//                do {
+//                    next_turn();
+//                } while (!isOver());
                 this.position = 1;
-                end();
+//                end();
             } else if (choiceEnd == 2) {
                 menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
                 generateBoard();
-                do {
-                    next_turn();
-                } while (!isOver());
-                this.position = 1;
-                end();
+                this.state= GameState.JEU;
+//                do {
+//                    next_turn();
+//                } while (!isOver());
+//                this.position = 1;
+//                end();
             }
     }
+
+    public void runGame(){
+        do {
+            switch (this.state){
+                case WELCOME :
+                    this.welcome();
+                    break;
+                case DEBUT:
+                    this.start();
+                    break;
+                case JEU:
+                    this.next_turn();
+                    break;
+                case FIN:
+                    this.end();
+            }
+        } while (continuePlay);
+    }
+
+    private void welcome() {
+        menu.displayWelcome();
+        this.state = GameState.DEBUT;
+    }
+
 }
 
