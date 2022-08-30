@@ -114,6 +114,15 @@ public class Menu {
         System.out.println(perso);
     }
 
+    public int diceResult(){
+        int throughDices;
+        int min = 1;
+        int max = 6;
+        int range = max - min + 1;
+        throughDices = (int) (Math.random() * range) + min;
+        return throughDices;
+    }
+
 }
 
 

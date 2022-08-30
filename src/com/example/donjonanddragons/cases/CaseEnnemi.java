@@ -1,5 +1,6 @@
 package com.example.donjonanddragons.cases;
 
+import com.example.donjonanddragons.Game;
 import com.example.donjonanddragons.ennemis.Dragon;
 import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.ennemis.Gobelin;
@@ -43,17 +44,26 @@ public class CaseEnnemi extends Case{
         Scanner attack = new Scanner(System.in);
         System.out.println("Attaquez le mechant ! (cliquez sur enter)");
         attack.nextLine();
-        ennemi.setLife(ennemi.getLife()-(character.getPower()+character.getAttackObject().getLevel()));
-        System.out.println(ennemi.getLife());
+        int somme = character.getPower()+character.getAttackObject().getLevel();
+        System.out.println("Votre force d'attaque est de : " + somme + " points. Vous lui infligez vos degats !");
+        ennemi.setLife(Math.max(ennemi.getLife()-(character.getPower()+character.getAttackObject().getLevel()),0));
         if(ennemi.getLife()<=0){
             System.out.println("Il reste : " + ennemi.getLife() + " PV a votre ennemi");
             System.out.println("Bravo vous avez vaincu l'ennemi !");
+
         }else{
             System.out.println("Il reste : " + ennemi.getLife() + " PV a votre ennemi");
-            System.out.println("L'ennemi vous attaque ! ");
+            System.out.println("Il n'est pas mort ! L'ennemi riposte");
             character.setLife(character.getLife() - ennemi.getAttack());
-            System.out.println("L'ennemi vous a attaque, il vous reste : " + character.getLife() + " PV");
-            System.out.println("L'ennemi s'enfui en vous ayant mis une belle pichenette");
+            if (character.getLife() <= 0){
+                System.out.println("L'ennemi vous a attaque, il vous reste : " + character.getLife() + " PV");
+                System.out.println("Apparement vous avez vraiment pris une trop grosse pichenette... Vous etes mort !");
+                Game game = new Game();
+                game.end();
+            }else{
+                System.out.println("L'ennemi vous a attaque, il vous reste : " + character.getLife() + " PV");
+                System.out.println("L'ennemi s'enfui en vous ayant mis une belle pichenette");
+            }
         }
     }
 

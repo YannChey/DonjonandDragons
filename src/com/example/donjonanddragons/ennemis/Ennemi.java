@@ -15,8 +15,6 @@ public class Ennemi {
         this.life = life;
     }
 
-
-
     @Override
     public String toString() {
         return ("Vous etes tombes sur le : " + name + ". Son attaque est de : " + attack + " et son niveau de vie est de : " + life);

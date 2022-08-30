@@ -2,6 +2,7 @@ package com.example.donjonanddragons;
 
 import com.example.donjonanddragons.cases.*;
 import com.example.donjonanddragons.ennemis.Dragon;
+import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.ennemis.Gobelin;
 import com.example.donjonanddragons.ennemis.Sorcier;
 import com.example.donjonanddragons.equipements.armes.attaque.Eclair;
@@ -9,12 +10,14 @@ import com.example.donjonanddragons.equipements.armes.attaque.Epee;
 import com.example.donjonanddragons.equipements.armes.attaque.FireBall;
 import com.example.donjonanddragons.equipements.armes.attaque.Massue;
 import com.example.donjonanddragons.equipements.potions.BigPotion;
+import com.example.donjonanddragons.equipements.potions.Potion;
 import com.example.donjonanddragons.equipements.potions.StandardPotion;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Game {
@@ -30,36 +33,33 @@ public class Game {
     boolean continuePlay = true;
 
     public Game() {
-        this.position = 2;
+        this.position = 1;
         this.menu = new Menu();
         generateBoard();
     }
 
     private void generateBoard() {
         plateau.clear();
-        for(int i =1;i<65;i++){
-            if (i <= 10){
-                plateau.add(new CaseEnnemi(new Gobelin()));
-            }else if (i <= 20){
+        for (int i = 1; i < 65; i++) {
+            if (i <= 10) {
+                boolean caseGobelin = plateau.add(new CaseEnnemi(new Gobelin()));
+            } else if (i <= 20) {
                 plateau.add(new CaseEnnemi(new Sorcier()));
-            }else if (i <= 24){
+            } else if (i <= 24) {
                 plateau.add(new CaseEnnemi(new Dragon()));
-            }else if(i <= 30){
+            } else if (i <= 30) {
                 plateau.add(new CaseCaisse(new StandardPotion()));
-            }else if(i <= 32){
+            } else if (i <= 32) {
                 plateau.add(new CaseCaisse(new BigPotion()));
-            }else if(i <= 37){
+            } else if (i <= 37) {
                 plateau.add(new CaseArme(new Massue()));
-            }
-            else if(i <= 41){
+            } else if (i <= 41) {
                 plateau.add(new CaseArme(new Epee()));
-            }
-            else if(i <= 46){
+            } else if (i <= 46) {
                 plateau.add(new CaseArme(new Eclair()));
-            }
-            else if(i <= 48){
+            } else if (i <= 48) {
                 plateau.add(new CaseArme(new FireBall()));
-            }else{
+            } else {
                 plateau.add(new CaseVide());
             }
         }
@@ -72,8 +72,13 @@ public class Game {
 //        plateau.add(new CaseVide());
     }
 
-    public static<T> void shuffle(ArrayList<T> plateau){
+    public static <T> void shuffle(ArrayList<T> plateau) {
         Collections.shuffle(plateau);
+    }
+
+    private void welcome() {
+        menu.displayWelcome();
+        this.state = GameState.DEBUT;
     }
 
     public void start() {
@@ -89,104 +94,78 @@ public class Game {
     }
 
     public void next_turn() {
-        Scanner turnplay = new Scanner(System.in);
-        System.out.println(ANSI_RED + "Veuillez lancer les des (cliquez sur enter)" + ANSI_RESET);
-        turnplay.nextLine();
-        try{
-            this.position = movePlayer();
-        } catch(PersonnageHorsPlateauException e){
-            e.printStackTrace();
-            this.position = plateau.toArray().length;
-            this.state = GameState.FIN;
+        while (continuePlay) {
+            Scanner turnplay = new Scanner(System.in);
+            System.out.println(ANSI_RED + "Veuillez lancer les des (cliquez sur enter)" + ANSI_RESET);
+            turnplay.nextLine();
+            try {
+                this.position = movePlayer();
+            } catch (PersonnageHorsPlateauException e) {
+                e.printStackTrace();
+                this.position = plateau.toArray().length;
+                this.state = GameState.FIN;
+                continuePlay = false;
+            }
         }
+
     }
 
     public int movePlayer() throws PersonnageHorsPlateauException {
-        int throughDices;
-        int min = 1;
-        int max = 6;
-        int range = max - min + 1;
-//        throughDices = (int) (Math.random() * range) + min;
-        throughDices = 31;
+        int DiceResult = menu.diceResult();
 //        throughDices = 1;
-        int new_position = this.position + throughDices;
+        int new_position = this.position + DiceResult;
         if (new_position <= plateau.toArray().length) {
-            System.out.println("Le resultat de votre lancer de des est : " + throughDices + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
-            Case currentCase = plateau.get(new_position-1);
-            currentCase.aEvent();
-            currentCase.interaction(perso1);
-            if(currentCase.getContent().isPresent()){
-                plateau.set(new_position-1, new CaseVide());
-            }
+            System.out.println("Le resultat de votre lancer de des est : " + DiceResult + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
+            evenements(new_position);
         } else {
             throw new PersonnageHorsPlateauException();
         }
         return new_position;
     }
 
-//    public boolean isOver() {
-//        return this.position == plateau.toArray().length;
-//    }
-
-//    public void gameDevelopment() {
-//        start();
-//        do {
-//            next_turn();
-//        } while (!isOver());
-//        for (Case aCase : plateau) {
-//            System.out.println(aCase.getClass().getName());
-//        }
-//        this.position = 1;
-//        generateBoard();
-//        end();
-//    }
-
-    public void end(){
-        int choiceEnd;
-        System.out.println("Bravo ! Vous avez gagne !");
-        System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
-        choiceEnd = myObj.nextInt();
-            if (choiceEnd == 1) {
-                generateBoard();
-                this.state= GameState.JEU;
-//                do {
-//                    next_turn();
-//                } while (!isOver());
-                this.position = 1;
-//                end();
-            } else if (choiceEnd == 2) {
-                menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
-                generateBoard();
-                this.state= GameState.JEU;
-//                do {
-//                    next_turn();
-//                } while (!isOver());
-//                this.position = 1;
-//                end();
-            }
+    public void evenements(int new_position) {
+        Case currentCase = plateau.get(new_position - 1);
+        currentCase.aEvent();
+        currentCase.interaction(perso1);
+//        plateau.set(new_position - 1, new CaseVide());
+//todo interface à créer pour lier les ennemis, potions, armes... qui va juste avoir une méthode en commun checkStay() pour vérifier si il y a encore quelque chose sur la case.
     }
 
-    public void runGame(){
+    public void end() {
+        System.out.println("Partie terminee ! ");
+        System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
+        int choiceEnd = myObj.nextInt();
+        if (choiceEnd == 1) {
+            resetGame();
+        } else if (choiceEnd == 2) {
+            menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
+            resetGame();
+        }
+    }
+
+    public void runGame() {
         do {
-            switch (this.state){
-                case WELCOME :
+            switch (this.state) {
+                case WELCOME:
                     this.welcome();
-                    break;
                 case DEBUT:
                     this.start();
-                    break;
                 case JEU:
                     this.next_turn();
-                    break;
                 case FIN:
+                    for (Case aCase : plateau) {
+                        System.out.println(aCase.getClass().getName());
+                    }
                     this.end();
             }
         } while (continuePlay);
     }
 
-    private void welcome() {
-        menu.displayWelcome();
-        this.state = GameState.DEBUT;
+    public void resetGame() {
+        generateBoard();
+        this.position = 1;
+        this.state = GameState.JEU;
+        continuePlay = true;
     }
 
 }
