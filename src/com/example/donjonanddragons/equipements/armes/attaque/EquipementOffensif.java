@@ -1,5 +1,7 @@
 package com.example.donjonanddragons.equipements.armes.attaque;
 
+import com.example.donjonanddragons.inter.checkStay;
+
 public abstract class EquipementOffensif {
     private String type;
     private int level;

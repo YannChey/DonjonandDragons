@@ -1,9 +1,10 @@
 package com.example.donjonanddragons.personnages;
 
+import com.example.donjonanddragons.Combattants;
 import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
 import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
 
-public abstract class CharacterPlayer {
+public abstract class CharacterPlayer implements Combattants {
     private int power;
     private int life;
     private String name;
@@ -20,6 +21,11 @@ public abstract class CharacterPlayer {
 
     public String toString() {
         return "Vous avez choisi le personnage : " + name  + ". Votre vie est de: " + life + ". Et votre puissance est de: " + power;
+    }
+
+    @Override
+    public boolean fighter() {
+        return true;
     }
 
     public String getName() {

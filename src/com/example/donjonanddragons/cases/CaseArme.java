@@ -1,15 +1,14 @@
 package com.example.donjonanddragons.cases;
 
+import com.example.donjonanddragons.inter.checkStay;
 import com.example.donjonanddragons.equipements.armes.attaque.*;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
-public class CaseArme extends Case{
+public class CaseArme extends Case implements checkStay {
     private EquipementOffensif weapon;
+    boolean isNowEmpty;
     public CaseArme(EquipementOffensif arme){
 //        this.weapon = this.weapon();
         this.weapon = arme;
@@ -39,9 +38,11 @@ public class CaseArme extends Case{
 
     @Override
     public void interaction(CharacterPlayer character) {
+        this.isNowEmpty = false;
         if (character instanceof Guerrier guerrier){
             if(this.weapon.getType().equals("Arme")&& !this.weapon.getName().equals(guerrier.getAttackObject().getName())){
                 guerrier.setAttackObject(this.weapon);
+                this.isNowEmpty = true;
             }else if(this.weapon.getName().equals(guerrier.getAttackObject().getName())){
                 System.out.println(this.weapon.getName());
                 System.out.println(guerrier.getAttackObject().getType());
@@ -53,6 +54,7 @@ public class CaseArme extends Case{
         }else if (character instanceof Magician magician){
             if(this.weapon.getType().equals("Sort")&& !this.weapon.getName().equals(magician.getAttackObject().getName())){
                 magician.setAttackObject(this.weapon);
+                this.isNowEmpty = true;
             }else if(this.weapon.getName().equals(magician.getAttackObject().getName())){
                 System.out.println(this.weapon.getName());
                 System.out.println(magician.getAttackObject().getType());
@@ -63,9 +65,13 @@ public class CaseArme extends Case{
             }
         }
     }
-
-    @Override
-    public Optional<Object> getContent() {
-        return Optional.of(this.weapon);
+    public boolean isEmptyCase(){
+        return this.isNowEmpty;
     }
+
+
+//    @Override
+//    public Optional<Object> getContent() {
+//        return Optional.of(this.weapon);
+//    }
 }

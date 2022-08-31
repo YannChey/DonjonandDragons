@@ -2,7 +2,6 @@ package com.example.donjonanddragons;
 
 import com.example.donjonanddragons.cases.*;
 import com.example.donjonanddragons.ennemis.Dragon;
-import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.ennemis.Gobelin;
 import com.example.donjonanddragons.ennemis.Sorcier;
 import com.example.donjonanddragons.equipements.armes.attaque.Eclair;
@@ -10,14 +9,12 @@ import com.example.donjonanddragons.equipements.armes.attaque.Epee;
 import com.example.donjonanddragons.equipements.armes.attaque.FireBall;
 import com.example.donjonanddragons.equipements.armes.attaque.Massue;
 import com.example.donjonanddragons.equipements.potions.BigPotion;
-import com.example.donjonanddragons.equipements.potions.Potion;
 import com.example.donjonanddragons.equipements.potions.StandardPotion;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class Game {
@@ -26,9 +23,6 @@ public class Game {
     private final Menu menu;
     private CharacterPlayer perso1;
     private final ArrayList<Case> plateau = new ArrayList<>();
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_BLUE = "\u001B[34m";
     GameState state = GameState.WELCOME;
     boolean continuePlay = true;
 
@@ -89,15 +83,13 @@ public class Game {
         for (Case aCase : plateau) {
             System.out.println(aCase.getClass().getName());
         }
-        System.out.println("C'est parti ! Votre objectif sera d'atteindre la case 64. Bonne chance !");
+        menu.startPhrase();
         this.state = GameState.JEU;
     }
 
     public void next_turn() {
         while (continuePlay) {
-            Scanner turnplay = new Scanner(System.in);
-            System.out.println(ANSI_RED + "Veuillez lancer les des (cliquez sur enter)" + ANSI_RESET);
-            turnplay.nextLine();
+           menu.scanLetThrowDices();
             try {
                 this.position = movePlayer();
             } catch (PersonnageHorsPlateauException e) {
@@ -107,7 +99,6 @@ public class Game {
                 continuePlay = false;
             }
         }
-
     }
 
     public int movePlayer() throws PersonnageHorsPlateauException {
@@ -115,7 +106,7 @@ public class Game {
 //        throughDices = 1;
         int new_position = this.position + DiceResult;
         if (new_position <= plateau.toArray().length) {
-            System.out.println("Le resultat de votre lancer de des est : " + DiceResult + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
+            menu.printDiceResult(DiceResult, new_position, plateau);
             evenements(new_position);
         } else {
             throw new PersonnageHorsPlateauException();
@@ -127,14 +118,20 @@ public class Game {
         Case currentCase = plateau.get(new_position - 1);
         currentCase.aEvent();
         currentCase.interaction(perso1);
-//        plateau.set(new_position - 1, new CaseVide());
+        boolean isNowEmpty = currentCase.isEmptyCase();
+//        boolean isComeBack = currentCase.characterIsBack();
+        if(isNowEmpty){
+            plateau.set(new_position - 1, new CaseVide());
+        }
+//        else if (isComeBack){
+//            new_position = new_position - menu.diceResult();
+//        }
 //todo interface à créer pour lier les ennemis, potions, armes... qui va juste avoir une méthode en commun checkStay() pour vérifier si il y a encore quelque chose sur la case.
     }
 
     public void end() {
-        System.out.println("Partie terminee ! ");
-        System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
-        int choiceEnd = myObj.nextInt();
+        menu.printEnd();
+        int choiceEnd = menu.scanChoiceEnd();
         if (choiceEnd == 1) {
             resetGame();
         } else if (choiceEnd == 2) {

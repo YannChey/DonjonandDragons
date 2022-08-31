@@ -1,7 +1,8 @@
 package com.example.donjonanddragons.ennemis;
 
+import com.example.donjonanddragons.Combattants;
 
-public class Ennemi {
+public class Ennemi implements Combattants {
     private String name;
     private int attack;
     private int life;
@@ -18,6 +19,15 @@ public class Ennemi {
     @Override
     public String toString() {
         return ("Vous etes tombes sur le : " + name + ". Son attaque est de : " + attack + " et son niveau de vie est de : " + life);
+    }
+
+    @Override
+    public boolean fighter() {
+        return true;
+    }
+
+    public boolean checkStayOnCase(){
+        return true;
     }
 
     public String getName() {

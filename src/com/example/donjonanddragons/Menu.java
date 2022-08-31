@@ -6,6 +6,7 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -123,6 +124,35 @@ public class Menu {
         return throughDices;
     }
 
+    public void printEnd(){
+        System.out.println("Partie terminee ! ");
+        System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
+    }
+
+    public void printDiceResult(int DiceResult, int new_position, ArrayList plateau){
+        System.out.println("Le resultat de votre lancer de des est : " + DiceResult + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
+    }
+
+    public void scanLetThrowDices(){
+        Scanner turnplay = new Scanner(System.in);
+        System.out.println(ANSI_RED + "Veuillez lancer les des (cliquez sur enter)" + ANSI_RESET);
+        turnplay.nextLine();
+    }
+
+    public int scanChoiceEnd(){
+        return myObj.nextInt();
+    }
+
+    public void startPhrase(){
+        System.out.println("C'est parti ! Votre objectif sera d'atteindre la case 64. Bonne chance !");
+
+    }
+
+    public String scanChoiceAttackEnnemi(){
+        Scanner attack = new Scanner(System.in);
+        System.out.println("Voulez-vous attaquer le mechant ? (1) / Voulez-vous fuir ? (2)");
+        return  attack.nextLine();
+    }
 }
 
 
