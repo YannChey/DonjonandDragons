@@ -1,20 +1,26 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.inter.checkStay;
+import com.example.donjonanddragons.CaisseInteractions;
 import com.example.donjonanddragons.equipements.potions.Potion;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
-public class CaseCaisse extends Case implements checkStay {
-    private Potion potion;
+import java.util.ArrayList;
+
+public class CaseCaisse extends Case {
+    private final Potion potion;
+
+    private final CaisseInteractions caisseInteractions;
     boolean isNowEmpty;
-    public CaseCaisse(Potion potion){
+    public CaseCaisse(Potion potion, CaisseInteractions caisseInteractions){
 //        this.potion = this.givePotion();
         this.potion = potion;
+        this.caisseInteractions = caisseInteractions;
     }
 
     @Override
     public void aEvent() {
         System.out.println(this.potion);
+
     }
 
     @Override
@@ -22,24 +28,20 @@ public class CaseCaisse extends Case implements checkStay {
         this.isNowEmpty = false;
         if (character.getLife() < 15){
             character.setLife(Math.min(character.getLife() + this.potion.getLevel(), 15));
-            System.out.println("Votre niveau de vie augmente !");
-            System.out.println("Votre vie est desormais de : " + character.getLife());
-            //todo utiliser la potion
+            this.caisseInteractions.yourLife(character.getLife());
             this.isNowEmpty = true;
         }else{
-            System.out.println("Votre vie est deja au maximum");
+            this.caisseInteractions.displayYouCantTakeThisPotion();
         }
     }
 
     @Override
-    public boolean isEmptyCase() {
-        return this.isNowEmpty;
+    public boolean consequences(ArrayList<Case> plateau, int position) {
+        if(this.isNowEmpty){
+            plateau.set(position - 1, new CaseVide());
+        }
+        return false;
     }
-
-    //    @Override
-//    public Optional<Object> getContent() {
-//        return Optional.of(this.potion);
-//    }
 
     public Potion getPotion() {
             return potion;

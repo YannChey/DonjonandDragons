@@ -1,9 +1,10 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.inter.checkStay;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
-public class CaseVide extends Case implements checkStay {
+import java.util.ArrayList;
+
+public class CaseVide extends Case {
 
     public CaseVide() {
 
@@ -16,15 +17,14 @@ public class CaseVide extends Case implements checkStay {
 
     @Override
     public void interaction(CharacterPlayer character) {
-
     }
 
     @Override
-    public boolean isEmptyCase() {
-        return true;
+    public boolean consequences(ArrayList<Case> plateau, int position) {
+        return false;
     }
 
-    public void aEvent(){
+    public void aEvent() {
         System.out.println("Il ne se passe rien ici!");
     }
 

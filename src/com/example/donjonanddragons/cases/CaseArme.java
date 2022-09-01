@@ -1,12 +1,13 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.inter.checkStay;
 import com.example.donjonanddragons.equipements.armes.attaque.*;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
-public class CaseArme extends Case implements checkStay {
+import java.util.ArrayList;
+
+public class CaseArme extends Case {
     private EquipementOffensif weapon;
     boolean isNowEmpty;
     public CaseArme(EquipementOffensif arme){
@@ -65,12 +66,17 @@ public class CaseArme extends Case implements checkStay {
             }
         }
     }
-    public boolean isEmptyCase(){
-        return this.isNowEmpty;
+
+    @Override
+    public boolean consequences(ArrayList<Case> plateau, int position) {
+        if(this.isNowEmpty){
+            plateau.set(position - 1, new CaseVide());
+        }
+        return false;
     }
 
 
-//    @Override
+    //    @Override
 //    public Optional<Object> getContent() {
 //        return Optional.of(this.weapon);
 //    }

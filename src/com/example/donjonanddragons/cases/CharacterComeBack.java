@@ -1,5 +1,5 @@
 package com.example.donjonanddragons.cases;
 
-public interface characterComeBack {
+public interface CharacterComeBack {
     public boolean characterIsBack();
 }

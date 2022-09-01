@@ -8,6 +8,7 @@ public abstract class CharacterPlayer implements Combattants {
     private int power;
     private int life;
     private String name;
+    int position;
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
 
@@ -17,6 +18,7 @@ public abstract class CharacterPlayer implements Combattants {
         this.name = name;
         this.attackObject = attackObject;
         this.defendObject = defendObject;
+        this.position=1;
     }
 
     public String toString() {
@@ -28,6 +30,19 @@ public abstract class CharacterPlayer implements Combattants {
         return true;
     }
 
+    public int diceResult(){
+        return (int) (Math.random() * 6) + 1;
+    }
+
+    public int updatePosition(int dices){
+       this.position = this.position + dices;
+       return this.position;
+    }
+
+    public int updateNegativePosition(int dices){
+        this.position = this.position - dices;
+        return this.position;
+    }
     public String getName() {
         return name;
     }
@@ -68,4 +83,11 @@ public abstract class CharacterPlayer implements Combattants {
         this.defendObject = defend;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

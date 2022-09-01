@@ -18,16 +18,17 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Game {
-    private int position;
-    Scanner myObj = new Scanner(System.in);
     private final Menu menu;
     private CharacterPlayer perso1;
     private final ArrayList<Case> plateau = new ArrayList<>();
     GameState state = GameState.WELCOME;
+
+    FightConsequences fightConsequences;
+
+    CharacterComeBack characterComeBack;
     boolean continuePlay = true;
 
     public Game() {
-        this.position = 1;
         this.menu = new Menu();
         generateBoard();
     }
@@ -36,15 +37,15 @@ public class Game {
         plateau.clear();
         for (int i = 1; i < 65; i++) {
             if (i <= 10) {
-                boolean caseGobelin = plateau.add(new CaseEnnemi(new Gobelin()));
+                plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight()));
             } else if (i <= 20) {
-                plateau.add(new CaseEnnemi(new Sorcier()));
+                plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight()));
             } else if (i <= 24) {
-                plateau.add(new CaseEnnemi(new Dragon()));
+                plateau.add(new CaseEnnemi(new Dragon(), new MenuFight()));
             } else if (i <= 30) {
-                plateau.add(new CaseCaisse(new StandardPotion()));
+                plateau.add(new CaseCaisse(new StandardPotion(), new Menu()));
             } else if (i <= 32) {
-                plateau.add(new CaseCaisse(new BigPotion()));
+                plateau.add(new CaseCaisse(new BigPotion(), new Menu()));
             } else if (i <= 37) {
                 plateau.add(new CaseArme(new Massue()));
             } else if (i <= 41) {
@@ -58,12 +59,6 @@ public class Game {
             }
         }
         shuffle(this.plateau);
-//        plateau.add(new CaseVide());
-//        plateau.add(new CaseVide());
-//        plateau.add(new CaseEnnemi());
-//        plateau.add(new CaseArme());
-//        plateau.add(new CaseCaisse());
-//        plateau.add(new CaseVide());
     }
 
     public static <T> void shuffle(ArrayList<T> plateau) {
@@ -88,13 +83,13 @@ public class Game {
     }
 
     public void next_turn() {
-        while (continuePlay) {
+        while (continuePlay && !this.state.equals(GameState.FIN)) {
            menu.scanLetThrowDices();
             try {
-                this.position = movePlayer();
+                perso1.setPosition(movePlayer());
             } catch (PersonnageHorsPlateauException e) {
                 e.printStackTrace();
-                this.position = plateau.toArray().length;
+                perso1.setPosition(plateau.toArray().length);
                 this.state = GameState.FIN;
                 continuePlay = false;
             }
@@ -102,31 +97,30 @@ public class Game {
     }
 
     public int movePlayer() throws PersonnageHorsPlateauException {
-        int DiceResult = menu.diceResult();
+        int throughtDices = perso1.diceResult();
 //        throughDices = 1;
-        int new_position = this.position + DiceResult;
+        int new_position = perso1.updatePosition(throughtDices);
         if (new_position <= plateau.toArray().length) {
-            menu.printDiceResult(DiceResult, new_position, plateau);
-            evenements(new_position);
+            menu.printDiceResult(throughtDices, new_position, plateau);
+            evenements(new_position,throughtDices);
         } else {
             throw new PersonnageHorsPlateauException();
         }
         return new_position;
     }
 
-    public void evenements(int new_position) {
+    public void evenements(int new_position, int dices) {
         Case currentCase = plateau.get(new_position - 1);
         currentCase.aEvent();
         currentCase.interaction(perso1);
-        boolean isNowEmpty = currentCase.isEmptyCase();
-//        boolean isComeBack = currentCase.characterIsBack();
-        if(isNowEmpty){
-            plateau.set(new_position - 1, new CaseVide());
+        boolean areYouDead = currentCase.consequences(plateau, new_position);
+        if(areYouDead){
+            this.state = GameState.FIN;
         }
-//        else if (isComeBack){
-//            new_position = new_position - menu.diceResult();
-//        }
-//todo interface à créer pour lier les ennemis, potions, armes... qui va juste avoir une méthode en commun checkStay() pour vérifier si il y a encore quelque chose sur la case.
+        boolean isComeBack = fightConsequences.turnBack();
+        if(isComeBack){
+            perso1.updateNegativePosition(dices);
+        }
     }
 
     public void end() {
@@ -150,9 +144,9 @@ public class Game {
                 case JEU:
                     this.next_turn();
                 case FIN:
-                    for (Case aCase : plateau) {
-                        System.out.println(aCase.getClass().getName());
-                    }
+//                    for (Case aCase : plateau) {
+//                        System.out.println(aCase.getClass().getName());
+//                    }
                     this.end();
             }
         } while (continuePlay);
@@ -160,7 +154,7 @@ public class Game {
 
     public void resetGame() {
         generateBoard();
-        this.position = 1;
+        perso1.setPosition(1);
         this.state = GameState.JEU;
         continuePlay = true;
     }

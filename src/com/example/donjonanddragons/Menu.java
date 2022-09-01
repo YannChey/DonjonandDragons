@@ -1,5 +1,6 @@
 package com.example.donjonanddragons;
 
+import com.example.donjonanddragons.cases.Case;
 import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
 import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Menu {
+public class Menu implements CaisseInteractions{
     Scanner myObj = new Scanner(System.in);
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -115,21 +116,12 @@ public class Menu {
         System.out.println(perso);
     }
 
-    public int diceResult(){
-        int throughDices;
-        int min = 1;
-        int max = 6;
-        int range = max - min + 1;
-        throughDices = (int) (Math.random() * range) + min;
-        return throughDices;
-    }
-
     public void printEnd(){
         System.out.println("Partie terminee ! ");
         System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu");
     }
 
-    public void printDiceResult(int DiceResult, int new_position, ArrayList plateau){
+    public void printDiceResult(int DiceResult, int new_position, ArrayList<Case> plateau){
         System.out.println("Le resultat de votre lancer de des est : " + DiceResult + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
     }
 
@@ -148,10 +140,15 @@ public class Menu {
 
     }
 
-    public String scanChoiceAttackEnnemi(){
-        Scanner attack = new Scanner(System.in);
-        System.out.println("Voulez-vous attaquer le mechant ? (1) / Voulez-vous fuir ? (2)");
-        return  attack.nextLine();
+    @Override
+    public void yourLife(int life) {
+        System.out.println("Votre niveau de vie augmente !");
+        System.out.println("Votre vie est desormais de : " + life);
+    }
+
+    @Override
+    public void displayYouCantTakeThisPotion() {
+        System.out.println("Votre vie est deja au maximum");
     }
 }
 

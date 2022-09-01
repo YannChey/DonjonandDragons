@@ -1,10 +1,11 @@
 package com.example.donjonanddragons.cases;
 
 
-import com.example.donjonanddragons.inter.checkStay;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
-public abstract class Case implements checkStay{
+import java.util.ArrayList;
+
+public abstract class Case {
     public Case(){
 
     }
@@ -17,8 +18,7 @@ public abstract class Case implements checkStay{
 
     public abstract void interaction(CharacterPlayer character);
 
-    @Override
-    public abstract boolean isEmptyCase();
+    public abstract boolean consequences(ArrayList<Case> plateau, int position);
 
     //    public abstract Optional<Object> getContent();
 }
