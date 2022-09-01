@@ -1,6 +1,7 @@
 package com.example.donjonanddragons;
 
 public interface FightInteractions {
+    boolean scanChoiceAttackEnnemi();
     boolean userWantToFlee();
 
     void displayStartGame();

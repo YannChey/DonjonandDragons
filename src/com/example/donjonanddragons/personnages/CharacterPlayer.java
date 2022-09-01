@@ -34,14 +34,12 @@ public abstract class CharacterPlayer implements Combattants {
         return (int) (Math.random() * 6) + 1;
     }
 
-    public int updatePosition(int dices){
+    public void updatePosition(int dices){
        this.position = this.position + dices;
-       return this.position;
     }
 
-    public int updateNegativePosition(int dices){
+    public void updateNegativePosition(int dices){
         this.position = this.position - dices;
-        return this.position;
     }
     public String getName() {
         return name;

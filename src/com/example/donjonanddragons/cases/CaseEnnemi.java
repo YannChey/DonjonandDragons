@@ -1,13 +1,12 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.FightConsequences;
 import com.example.donjonanddragons.FightInteractions;
 import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 import java.util.ArrayList;
 
-public class CaseEnnemi extends Case implements CharacterComeBack,FightConsequences {
+public class CaseEnnemi extends Case implements CharacterComeBack {
     Ennemi ennemi;
     FightInteractions fightInteractions;
     boolean isNowEmpty;
@@ -29,11 +28,11 @@ public class CaseEnnemi extends Case implements CharacterComeBack,FightConsequen
 
     @Override
     public void interaction(CharacterPlayer character) {
-        boolean areYouAttacking = this.fightInteractions.userWantToFlee();
-        this.isNowEmpty = false;
-        do{
+        boolean areYouAttacking;
+        do {
+             areYouAttacking = this.fightInteractions.userWantToFlee();
+            this.isNowEmpty = false;
             if (areYouAttacking) {
-                this.fightInteractions.displayStartGame();
                 int somme = character.getPower() + character.getAttackObject().getLevel();
                 this.fightInteractions.damageAttack(somme);
                 ennemi.setLife(Math.max(ennemi.getLife() - (character.getPower() + character.getAttackObject().getLevel()), 0));
@@ -50,28 +49,23 @@ public class CaseEnnemi extends Case implements CharacterComeBack,FightConsequen
                         this.fightInteractions.displayYouAreAlive(character.getLife());
                     }
                 }
-            }
-            else{
+            } else {
                 this.fightInteractions.flee();
                 this.didYouComeBack = true;
             }
-        }while(character.getLife()>0 && this.ennemi.getLife()>0 && areYouAttacking);
+        } while (character.getLife() > 0 && this.ennemi.getLife() > 0 && areYouAttacking);
 
-    }
-
-    public Ennemi getEnnemi() {
-        return ennemi;
     }
 
     @Override
     public boolean consequences(ArrayList<Case> plateau, int position) {
-        if(this.isNowEmpty){
+        if (this.isNowEmpty) {
             plateau.set(position - 1, new CaseVide());
         }
-            return areYouDead;
+        return areYouDead;
     }
 
-    public boolean turnBack(){
+    public boolean turnBack() {
         return didYouComeBack;
     }
 
@@ -79,9 +73,4 @@ public class CaseEnnemi extends Case implements CharacterComeBack,FightConsequen
     public boolean characterIsBack() {
         return this.didYouComeBack;
     }
-
-//    @Override
-//    public Optional<Object> getContent() {
-//        return Optional.of(this.ennemi);
-//    }
 }

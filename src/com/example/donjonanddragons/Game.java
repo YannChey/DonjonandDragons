@@ -23,8 +23,6 @@ public class Game {
     private final ArrayList<Case> plateau = new ArrayList<>();
     GameState state = GameState.WELCOME;
 
-    FightConsequences fightConsequences;
-
     CharacterComeBack characterComeBack;
     boolean continuePlay = true;
 
@@ -86,7 +84,7 @@ public class Game {
         while (continuePlay && !this.state.equals(GameState.FIN)) {
            menu.scanLetThrowDices();
             try {
-                perso1.setPosition(movePlayer());
+                movePlayer();
             } catch (PersonnageHorsPlateauException e) {
                 e.printStackTrace();
                 perso1.setPosition(plateau.toArray().length);
@@ -96,30 +94,32 @@ public class Game {
         }
     }
 
-    public int movePlayer() throws PersonnageHorsPlateauException {
+    public void movePlayer() throws PersonnageHorsPlateauException {
         int throughtDices = perso1.diceResult();
 //        throughDices = 1;
-        int new_position = perso1.updatePosition(throughtDices);
-        if (new_position <= plateau.toArray().length) {
-            menu.printDiceResult(throughtDices, new_position, plateau);
-            evenements(new_position,throughtDices);
+        perso1.updatePosition(throughtDices);
+        if (perso1.getPosition() <= plateau.toArray().length) {
+            menu.printDiceResult(throughtDices, perso1.getPosition(), plateau);
+            evenements();
         } else {
             throw new PersonnageHorsPlateauException();
         }
-        return new_position;
     }
 
-    public void evenements(int new_position, int dices) {
-        Case currentCase = plateau.get(new_position - 1);
+    public void evenements() {
+        Case currentCase = plateau.get(perso1.getPosition() - 1);
         currentCase.aEvent();
         currentCase.interaction(perso1);
-        boolean areYouDead = currentCase.consequences(plateau, new_position);
+        boolean areYouDead = currentCase.consequences(plateau, perso1.getPosition());
         if(areYouDead){
             this.state = GameState.FIN;
         }
-        boolean isComeBack = fightConsequences.turnBack();
-        if(isComeBack){
-            perso1.updateNegativePosition(dices);
+        if (currentCase instanceof CaseEnnemi caseEnnemi){
+            if(caseEnnemi.turnBack()){
+                int dices = perso1.diceResult();
+                perso1.updateNegativePosition(dices);
+                System.out.println("Vous avez fuit et recule de " + dices + " vous etes a la case " + perso1.getPosition());
+            }
         }
     }
 
@@ -144,9 +144,9 @@ public class Game {
                 case JEU:
                     this.next_turn();
                 case FIN:
-//                    for (Case aCase : plateau) {
-//                        System.out.println(aCase.getClass().getName());
-//                    }
+                    for (Case aCase : plateau) {
+                        System.out.println(aCase.getClass().getName());
+                    }
                     this.end();
             }
         } while (continuePlay);
