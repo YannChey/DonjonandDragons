@@ -64,6 +64,8 @@ public class CaseArme extends Case {
             else{
                 System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
             }
+
+            //TODO FINIR DE REFACTO CASEARME
         }
     }
 
