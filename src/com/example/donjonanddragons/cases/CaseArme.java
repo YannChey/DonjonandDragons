@@ -1,5 +1,6 @@
 package com.example.donjonanddragons.cases;
 
+import com.example.donjonanddragons.ArmeInteractions;
 import com.example.donjonanddragons.equipements.armes.attaque.*;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
@@ -10,9 +11,12 @@ import java.util.ArrayList;
 public class CaseArme extends Case {
     private EquipementOffensif weapon;
     boolean isNowEmpty;
-    public CaseArme(EquipementOffensif arme){
+
+    ArmeInteractions armeInteractions;
+    public CaseArme(EquipementOffensif arme, ArmeInteractions armeInteractions){
 //        this.weapon = this.weapon();
         this.weapon = arme;
+        this.armeInteractions = armeInteractions;
     }
 
     public EquipementOffensif weapon(){
@@ -45,21 +49,17 @@ public class CaseArme extends Case {
                 guerrier.setAttackObject(this.weapon);
                 this.isNowEmpty = true;
             }else if(this.weapon.getName().equals(guerrier.getAttackObject().getName())){
-                System.out.println(this.weapon.getName());
-                System.out.println(guerrier.getAttackObject().getType());
-                System.out.println("Vous etes deja equipe de cette arme");
+                armeInteractions.displayYouAreEquiped(guerrier.getAttackObject().getType(),this.weapon.getName());
             }
             else{
-                System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
+                armeInteractions.displayYouCantTakeThisWeapon();
             }
         }else if (character instanceof Magician magician){
             if(this.weapon.getType().equals("Sort")&& !this.weapon.getName().equals(magician.getAttackObject().getName())){
                 magician.setAttackObject(this.weapon);
                 this.isNowEmpty = true;
             }else if(this.weapon.getName().equals(magician.getAttackObject().getName())){
-                System.out.println(this.weapon.getName());
-                System.out.println(magician.getAttackObject().getType());
-                System.out.println("Vous etes deja equipe de cette arme");
+                armeInteractions.displayYouAreAlreadyEquiped(this.weapon.getName(),magician.getAttackObject().getType());
             }
             else{
                 System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");

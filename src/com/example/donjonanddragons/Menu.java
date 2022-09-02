@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Menu implements CaisseInteractions{
+public class Menu implements CaisseInteractions,ArmeInteractions{
     Scanner myObj = new Scanner(System.in);
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -149,6 +149,24 @@ public class Menu implements CaisseInteractions{
     @Override
     public void displayYouCantTakeThisPotion() {
         System.out.println("Votre vie est deja au maximum");
+    }
+
+    public void displayYouAreEquiped(String type, String weaponName){
+        System.out.println(weaponName);
+        System.out.println(type);
+        System.out.println("Vous etes deja equipe de cette arme");
+    }
+
+    @Override
+    public void displayYouCantTakeThisWeapon() {
+        System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
+    }
+
+    @Override
+    public void displayYouAreAlreadyEquiped(String weaponName, String typeYouAreEquiped) {
+        System.out.println(weaponName);
+        System.out.println(typeYouAreEquiped);
+        System.out.println("Vous etes deja equipe de cette arme");
     }
 }
 

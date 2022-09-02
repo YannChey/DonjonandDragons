@@ -43,13 +43,13 @@ public class Game {
             } else if (i <= 32) {
                 plateau.add(new CaseCaisse(new BigPotion(), new Menu()));
             } else if (i <= 37) {
-                plateau.add(new CaseArme(new Massue()));
+                plateau.add(new CaseArme(new Massue(),new Menu()));
             } else if (i <= 41) {
-                plateau.add(new CaseArme(new Epee()));
+                plateau.add(new CaseArme(new Epee(),new Menu()));
             } else if (i <= 46) {
-                plateau.add(new CaseArme(new Eclair()));
+                plateau.add(new CaseArme(new Eclair(),new Menu()));
             } else if (i <= 48) {
-                plateau.add(new CaseArme(new FireBall()));
+                plateau.add(new CaseArme(new FireBall(),new Menu()));
             } else {
                 plateau.add(new CaseVide());
             }
