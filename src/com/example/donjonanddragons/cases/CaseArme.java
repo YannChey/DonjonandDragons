@@ -74,10 +74,4 @@ public class CaseArme extends Case {
         }
         return false;
     }
-
-
-    //    @Override
-//    public Optional<Object> getContent() {
-//        return Optional.of(this.weapon);
-//    }
 }

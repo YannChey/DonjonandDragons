@@ -23,7 +23,6 @@ public class Game {
     private final ArrayList<Case> plateau = new ArrayList<>();
     GameState state = GameState.WELCOME;
 
-    CharacterComeBack characterComeBack;
     boolean continuePlay = true;
 
     public Game() {

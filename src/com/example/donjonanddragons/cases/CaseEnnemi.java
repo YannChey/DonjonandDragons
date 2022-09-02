@@ -6,7 +6,10 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 import java.util.ArrayList;
 
-public class CaseEnnemi extends Case implements CharacterComeBack {
+/**
+ * Déclaration des attributs de ma classe CaseEnnemi
+ */
+public class CaseEnnemi extends Case {
     Ennemi ennemi;
     FightInteractions fightInteractions;
     boolean isNowEmpty;
@@ -14,18 +17,37 @@ public class CaseEnnemi extends Case implements CharacterComeBack {
 
     boolean areYouDead = false;
 
+    /**
+     * Constructeur de ma class CaseEnnemi
+     * @param ennemiRace
+     * @param fightInteractions
+     */
     public CaseEnnemi(Ennemi ennemiRace, FightInteractions fightInteractions) {
         this.ennemi = ennemiRace;
         this.fightInteractions = fightInteractions;
     }
 
 
+    /**
+     * Méthode appelée dans ma classe Game, qui permet d'afficher si un ennemi est présent sur cette case, et quel type d'ennemi.
+     * Le this.ennemi permet de déterminer quel enfant est appelé dans cette case.
+     */
     @Override
     public void aEvent() {
         this.fightInteractions.isAnEnnemy();
         System.out.println(this.ennemi);
     }
 
+    /**
+     * Méthode principale de ma classe qui permet de réaliser l'action de combat.
+     * Celle-ci intéragit avec une interface FightInteractions qui appelle le menuFight où tout mon display sera présent.
+     * Enfin elle intéragit également avec la classe Ennemi et notre méthode va influencer sur la vie de notre personnage et sur celle des ennemis.
+     * La déclaration de la variable areYouAttacking permet de renvoyer l'information de si le personnage veut attaquer ou non.
+     * Par la suite, on joue avec les getters et les setters pour modifier la vie du joueur et de l'ennemi.
+     * Enfin on utilise trois attributs déclarés au préalable : isNowEmpty pour voir si l'ennemi a été battu et donc pour vider la case,
+     * areYouDead pour vérifier si le personnage n'est pas mort, et didYouComeBack pour vérifier si le personnage n'a pas fuit le combat.
+     * @param character
+     */
     @Override
     public void interaction(CharacterPlayer character) {
         boolean areYouAttacking;
@@ -57,6 +79,13 @@ public class CaseEnnemi extends Case implements CharacterComeBack {
 
     }
 
+    /**
+     * Méthode qui permet de renvoyer à mon game la modification de mon plateau de jeu si l'ennemi est mort et de retourner si notre personnage est mort.
+     * La classe game appelle cette méthode et applique les conséquences suivant le retour du booléan.
+     * @param plateau
+     * @param position
+     * @return areYouDead
+     */
     @Override
     public boolean consequences(ArrayList<Case> plateau, int position) {
         if (this.isNowEmpty) {
@@ -65,12 +94,11 @@ public class CaseEnnemi extends Case implements CharacterComeBack {
         return areYouDead;
     }
 
+    /**
+     * @return notre boolean qui informe si notre personnage a fuit le combat
+     */
     public boolean turnBack() {
         return didYouComeBack;
     }
 
-    @Override
-    public boolean characterIsBack() {
-        return this.didYouComeBack;
-    }
 }
