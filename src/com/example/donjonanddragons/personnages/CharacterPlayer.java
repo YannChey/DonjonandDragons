@@ -4,6 +4,9 @@ import com.example.donjonanddragons.Combattants;
 import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
 import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
 
+import java.awt.*;
+import java.sql.*;
+
 public abstract class CharacterPlayer implements Combattants {
     private int power;
     private int life;
@@ -23,6 +26,45 @@ public abstract class CharacterPlayer implements Combattants {
 
     public String toString() {
         return "Vous avez choisi le personnage : " + name  + ". Votre vie est de: " + life + ". Et votre puissance est de: " + power;
+    }
+
+    public void displayCharacterFromBDD(){
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                String BDD = "donjons_and_dragons";
+                String url = "jdbc:mysql://localhost:3306/";
+                String user = "yannche";
+                String passwd = "alerteauxgogols";
+                Connection cn=null;
+                Statement st=null;
+                ResultSet rs=null;
+
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    cn = DriverManager.getConnection(url, user, passwd);
+                    st = cn.createStatement();
+                    String sql = "SELECT * FROM donjons_and_dragons";
+                    rs = st.executeQuery(sql);
+                    while(rs.next()){
+                        System.out.println(rs.getString("name"));
+                    }
+                    System.out.println("Connecter");
+                } catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println("Erreur");
+                    System.exit(0);
+                }finally{
+                    try{
+                        assert cn != null;
+                        cn.close();
+                        assert st != null;
+                        st.close();
+                    }catch(SQLException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     @Override

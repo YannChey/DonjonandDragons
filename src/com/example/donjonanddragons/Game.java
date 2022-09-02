@@ -15,7 +15,6 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
 public class Game {
     private final Menu menu;
@@ -70,6 +69,7 @@ public class Game {
     public void start() {
         String name = menu.getCharacterType();
         perso1 = menu.createCharacter(name);
+//        perso1.displayCharacter();
         menu.displayCharacter(perso1);
         generateBoard();
         for (Case aCase : plateau) {
@@ -86,6 +86,7 @@ public class Game {
                 movePlayer();
             } catch (PersonnageHorsPlateauException e) {
                 e.printStackTrace();
+                System.out.println("Bravo ! Vous avez gagne ! ");
                 perso1.setPosition(plateau.toArray().length);
                 this.state = GameState.FIN;
                 continuePlay = false;
@@ -97,7 +98,7 @@ public class Game {
         int throughtDices = perso1.diceResult();
 //        throughDices = 1;
         perso1.updatePosition(throughtDices);
-        if (perso1.getPosition() <= plateau.toArray().length) {
+        if (perso1.getPosition() < plateau.toArray().length) {
             menu.printDiceResult(throughtDices, perso1.getPosition(), plateau);
             evenements();
         } else {
@@ -112,6 +113,7 @@ public class Game {
         boolean areYouDead = currentCase.consequences(plateau, perso1.getPosition());
         if(areYouDead){
             this.state = GameState.FIN;
+            System.out.println("Vous avez perdu...");
         }
         if (currentCase instanceof CaseEnnemi caseEnnemi){
             if(caseEnnemi.turnBack()){
@@ -143,9 +145,9 @@ public class Game {
                 case JEU:
                     this.next_turn();
                 case FIN:
-                    for (Case aCase : plateau) {
-                        System.out.println(aCase.getClass().getName());
-                    }
+//                    for (Case aCase : plateau) {
+//                        System.out.println(aCase.getClass().getName());
+//                    }
                     this.end();
             }
         } while (continuePlay);
