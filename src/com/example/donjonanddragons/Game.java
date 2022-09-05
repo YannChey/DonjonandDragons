@@ -66,11 +66,12 @@ public class Game {
         this.state = GameState.DEBUT;
     }
 
-    public void start() {
-        String name = menu.getCharacterType();
-        perso1 = menu.createCharacter(name);
-//        perso1.displayCharacter();
-        menu.displayCharacter(perso1);
+    public void start(){
+        String num = menu.makeAChoice();
+//        String name = menu.getCharacterType();
+//        perso1 = menu.createCharacter(name);
+        perso1 = menu.menuSwap(num);
+        menu.getMenu(perso1);
         generateBoard();
         for (Case aCase : plateau) {
             System.out.println(aCase.getClass().getName());

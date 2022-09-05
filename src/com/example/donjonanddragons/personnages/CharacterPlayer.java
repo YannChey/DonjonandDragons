@@ -11,60 +11,23 @@ public abstract class CharacterPlayer implements Combattants {
     private int power;
     private int life;
     private String name;
+    private String type;
     int position;
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
-
-    public CharacterPlayer(int power, int life, String name, EquipementOffensif attackObject, EquipementDefensif defendObject) {
-        this.power = power;
-        this.life = life;
-        this.name = name;
-        this.attackObject = attackObject;
-        this.defendObject = defendObject;
-        this.position=1;
+//TODO  (param du constructeur si j'utilise super)
+    public CharacterPlayer(int power, int life, String name, String type, EquipementOffensif attackObject, EquipementDefensif defendObject) {
+//        this.power = power;
+//        this.life = life;
+//        this.name = name;
+//        this.attackObject = attackObject;
+//        this.defendObject = defendObject;
+//        this.position = 1;
+//        this.type = type;
     }
 
     public String toString() {
-        return "Vous avez choisi le personnage : " + name  + ". Votre vie est de: " + life + ". Et votre puissance est de: " + power;
-    }
-
-    public void displayCharacterFromBDD(){
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                String BDD = "donjons_and_dragons";
-                String url = "jdbc:mysql://localhost:3306/";
-                String user = "yannche";
-                String passwd = "alerteauxgogols";
-                Connection cn=null;
-                Statement st=null;
-                ResultSet rs=null;
-
-                try {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    cn = DriverManager.getConnection(url, user, passwd);
-                    st = cn.createStatement();
-                    String sql = "SELECT * FROM donjons_and_dragons";
-                    rs = st.executeQuery(sql);
-                    while(rs.next()){
-                        System.out.println(rs.getString("name"));
-                    }
-                    System.out.println("Connecter");
-                } catch (Exception e){
-                    e.printStackTrace();
-                    System.out.println("Erreur");
-                    System.exit(0);
-                }finally{
-                    try{
-                        assert cn != null;
-                        cn.close();
-                        assert st != null;
-                        st.close();
-                    }catch(SQLException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        return "Bienvenue " + name + ". Vous avez choisi le personnage : " + type + ". Votre vie est de: " + life + ". Et votre puissance est de: " + power;
     }
 
     @Override
@@ -72,17 +35,18 @@ public abstract class CharacterPlayer implements Combattants {
         return true;
     }
 
-    public int diceResult(){
+    public int diceResult() {
         return (int) (Math.random() * 6) + 1;
     }
 
-    public void updatePosition(int dices){
-       this.position = this.position + dices;
+    public void updatePosition(int dices) {
+        this.position = this.position + dices;
     }
 
-    public void updateNegativePosition(int dices){
+    public void updateNegativePosition(int dices) {
         this.position = this.position - dices;
     }
+
     public String getName() {
         return name;
     }
@@ -129,5 +93,13 @@ public abstract class CharacterPlayer implements Combattants {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

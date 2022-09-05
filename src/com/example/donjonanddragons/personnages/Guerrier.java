@@ -1,12 +1,30 @@
 package com.example.donjonanddragons.personnages;
 
 import com.example.donjonanddragons.equipements.armes.attaque.BaseArme;
+import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
 import com.example.donjonanddragons.equipements.armes.defense.Bouclier;
 import com.example.donjonanddragons.equipements.armes.attaque.Epee;
+import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
 
 public class Guerrier extends CharacterPlayer {
      public Guerrier(){
-         super(10,10,"Warrior",new BaseArme(),new Bouclier());
+         super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier());
+//         setLife(10);
+//         setPower(10);
+//         setName("name");
+//         setType("warrior");
+//         setAttackObject(getAttackObject());
+//         setDefendObject(getDefendObject());
+     }
+     //TODO IL FAUT REGLER LE PROBLEME DE L'APPEL DE LA METHODE GETCHARACTERFROMDB
+     public Guerrier(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif){
+         super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier());
+         this.setPower(power);
+         this.setLife(life);
+         this.setName(name);
+         this.setType(type);
+         this.setAttackObject(equipementOffensif);
+         this.setDefendObject(equipementDefensif);
      }
 
     @Override

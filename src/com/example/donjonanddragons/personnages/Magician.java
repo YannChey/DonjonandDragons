@@ -6,7 +6,7 @@ import com.example.donjonanddragons.equipements.armes.defense.Philtre;
 
 public class Magician extends CharacterPlayer {
     public Magician(){
-        super(15,6,"Magician",new BaseArme(),new Philtre());
+        super(15,6,"Magician","Magician", new BaseArme(),new Philtre());
 //        setAttackObject(new Sort());
 //        setDefendObject(new Philtre());
 //        setName("Magician");
