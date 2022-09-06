@@ -33,23 +33,23 @@ public class Game {
         plateau.clear();
         for (int i = 1; i < 65; i++) {
             if (i <= 10) {
-                plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight()));
+                plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight(), new DBConnection()));
             } else if (i <= 20) {
-                plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight()));
+                plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight(), new DBConnection()));
             } else if (i <= 24) {
-                plateau.add(new CaseEnnemi(new Dragon(), new MenuFight()));
+                plateau.add(new CaseEnnemi(new Dragon(), new MenuFight(), new DBConnection()));
             } else if (i <= 30) {
-                plateau.add(new CaseCaisse(new StandardPotion(), new Menu()));
+                plateau.add(new CaseCaisse(new StandardPotion(), new Menu(), new DBConnection()));
             } else if (i <= 32) {
-                plateau.add(new CaseCaisse(new BigPotion(), new Menu()));
+                plateau.add(new CaseCaisse(new BigPotion(), new Menu(), new DBConnection()));
             } else if (i <= 37) {
-                plateau.add(new CaseArme(new Massue(),new Menu()));
+                plateau.add(new CaseArme(new Massue(),new Menu(),new DBConnection()));
             } else if (i <= 41) {
-                plateau.add(new CaseArme(new Epee(),new Menu()));
+                plateau.add(new CaseArme(new Epee(),new Menu(), new DBConnection()));
             } else if (i <= 46) {
-                plateau.add(new CaseArme(new Eclair(),new Menu()));
+                plateau.add(new CaseArme(new Eclair(),new Menu(), new DBConnection()));
             } else if (i <= 48) {
-                plateau.add(new CaseArme(new FireBall(),new Menu()));
+                plateau.add(new CaseArme(new FireBall(),new Menu(), new DBConnection()));
             } else {
                 plateau.add(new CaseVide());
             }
@@ -68,14 +68,12 @@ public class Game {
 
     public void start(){
         String num = menu.makeAChoice();
-//        String name = menu.getCharacterType();
-//        perso1 = menu.createCharacter(name);
         perso1 = menu.menuSwap(num);
-        menu.getMenu(perso1);
+        menu.getMenu(perso1,num);
         generateBoard();
-        for (Case aCase : plateau) {
-            System.out.println(aCase.getClass().getName());
-        }
+//        for (Case aCase : plateau) {
+//            System.out.println(aCase.getClass().getName());
+//        }
         menu.startPhrase();
         this.state = GameState.JEU;
     }
@@ -111,6 +109,7 @@ public class Game {
         Case currentCase = plateau.get(perso1.getPosition() - 1);
         currentCase.aEvent();
         currentCase.interaction(perso1);
+        currentCase.interaction(perso1, menu.id);
         boolean areYouDead = currentCase.consequences(plateau, perso1.getPosition());
         if(areYouDead){
             this.state = GameState.FIN;
@@ -133,6 +132,8 @@ public class Game {
         } else if (choiceEnd == 2) {
             menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
             resetGame();
+        } else{
+            System.exit(0);
         }
     }
 

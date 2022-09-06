@@ -1,6 +1,6 @@
 package com.example.donjonanddragons.equipements.armes.attaque;
 
-public class Eclair extends Sort{
+public class Eclair extends Spell {
     public Eclair(){
         super(2,"un eclair");
     }

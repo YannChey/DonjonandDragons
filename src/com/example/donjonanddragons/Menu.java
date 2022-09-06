@@ -1,8 +1,10 @@
 package com.example.donjonanddragons;
 
 import com.example.donjonanddragons.cases.Case;
+import com.example.donjonanddragons.equipements.armes.attaque.*;
+import com.example.donjonanddragons.equipements.armes.defense.Bouclier;
 import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
-import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
+import com.example.donjonanddragons.equipements.armes.defense.Philtre;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
@@ -10,6 +12,7 @@ import com.example.donjonanddragons.personnages.Magician;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu implements CaisseInteractions, ArmeInteractions {
@@ -18,6 +21,10 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
     DBConnection dbConnection = new DBConnection();
+    private EquipementDefensif equipementDefensif;
+    private EquipementOffensif equipementOffensif;
+    private CharacterPlayer characterPlayer;
+    int id;
 
     public void displayWelcome() {
         System.out.println(ANSI_RED + "Bienvenue dans notre nouveau jeu Donjons et Dragons !" + ANSI_RESET);
@@ -41,10 +48,10 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         CharacterPlayer perso1;
         if (num.equals("1")) {
             perso1 = insertCharacterFromBDD();
-        }
-        else {
-            displayCharactersFromBDD();
-            int id = selectCharacterFromBDD();
+            dbConnection.takeIdFromBDD();
+        } else {
+            List idList = dbConnection.displayCharactersFromBDD();
+            int id = selectCharacterFromBDD(idList);
             perso1 = getCharacterFromDBB(id);
         }
         return perso1;
@@ -66,7 +73,7 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         return name;
     }
 
-    public CharacterPlayer createCharacter(String name) {
+    public CharacterPlayer instanceCharacterType(String name) {
         CharacterPlayer perso1;
         if (name.equals("warrior")) {
             perso1 = new Guerrier();
@@ -78,11 +85,9 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
 
     public CharacterPlayer insertCharacterFromBDD() {
         String name = getCharacterType();
-        CharacterPlayer characterPlayer = createCharacter(name);
+        CharacterPlayer characterPlayer = instanceCharacterType(name);
         try {
-            Statement st = dbConnection.connectionDB();
-//            System.out.println("Connexion réussie");
-//            ResultSet rs = st.executeQuery("SELECT * FROM hero");
+            Statement st = dbConnection.connectToDBB();
             st.executeUpdate("INSERT INTO `hero`(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`) " +
                     "VALUES ('" + name + "','" + characterPlayer.getName() + "','" + characterPlayer.getLife() + "','"
                     + characterPlayer.getPower() + "','" + characterPlayer.getAttackObject().getName() + "','" + characterPlayer.getDefendObject().getName() + "')");
@@ -92,77 +97,99 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         return characterPlayer;
     }
 
-    public void displayCharactersFromBDD() {
+    public int selectCharacterFromBDD(List idList) {
+        System.out.println("Pour commencer, sélectionner le personnage que vous souhaitez jouer (rentrez le numero de votre sauvegarde)");
+        this.id = Integer.parseInt(myObj.nextLine());
+        while (!idList.contains(this.id)) {
+            System.out.println(ANSI_RED + "Vous devez choisir une sauvegarde existante ! " + ANSI_RESET);
+            try {
+                this.id = Integer.parseInt(myObj.nextLine());
+            } catch (InputMismatchException e) {
+            }
+        }
+        return this.id;
+    }
+
+    public EquipementOffensif equipementOffensif(int id) {
         try {
-            Statement st = dbConnection.connectionDB();
-            ResultSet rs = st.executeQuery("SELECT * FROM hero");
+            Statement st = dbConnection.connectToDBB();
+            ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE ID = " + id + "");
             while (rs.next()) {
-                System.out.println("Votre personnage : " + rs.getString("Id") + " de type : " + rs.getString("Type") +
-                        " qui a comme nom : " + rs.getString("Nom") + " d'un niveau de vie de : " + rs.getString("NiveauVie")
-                        + " et un niveau de force de : " + rs.getString("NiveauForce") + " avec une arme qui est : " + rs.getString("Weapon")
-                        + " et une défense qui est : " + rs.getString("Bouclier"));
-//                System.out.println(rs.getString("Type"));
-//                System.out.println(rs.getString("Nom"));
-//                System.out.println(rs.getString("NiveauVie"));
-//                System.out.println(rs.getString("NiveauForce"));
-//                System.out.println(rs.getString("Weapon"));
-//                System.out.println(rs.getString("Bouclier"));
-//                CharacterPlayer c = new Guerrier(rs.getString("Id"),
-//                                                    ..., .... , ....)
+                if (rs.getString("Weapon").equals("une epee")) {
+                    this.equipementOffensif = new Epee();
+                } else if (rs.getString("Weapon").equals("une massue")) {
+                    this.equipementOffensif = new Massue();
+                } else if (rs.getString("Weapon").equals("un eclair")) {
+                    this.equipementOffensif = new Eclair();
+                } else if (rs.getString("Weapon").equals("une boule de feu")) {
+                    this.equipementOffensif = new FireBall();
+                } else {
+                    this.equipementOffensif = new BaseArme();
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return this.equipementOffensif;
     }
 
-    public int selectCharacterFromBDD() {
-        int id;
-        System.out.println("Pour commencer, sélectionner le personnage que vous souhaitez jouer");
-        id = Integer.parseInt(myObj.nextLine().toLowerCase());
-        return id;
-    }
-
-    public void getCharacterFromDBB(int id) {
+    public EquipementDefensif equipementDefensif(int id) {
         try {
-            Statement st = dbConnection.connectionDB();
+            Statement st = dbConnection.connectToDBB();
+            ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE ID = " + id + "");
+            while (rs.next()) {
+                if (rs.getString("Bouclier").equals("Bouclier")) {
+                    this.equipementDefensif = new Bouclier();
+                } else {
+                    this.equipementDefensif = new Philtre();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return equipementDefensif;
+    }
+
+    public CharacterPlayer getCharacterFromDBB(int id) {
+        try {
+            Statement st = dbConnection.connectToDBB();
             ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE ID = " + id + "");
             while (rs.next()) {
                 System.out.println("Votre personnage : " + rs.getString("Id") + " de type : " + rs.getString("Type") +
                         " qui a comme nom : " + rs.getString("Nom") + " d'un niveau de vie de : " + rs.getString("NiveauVie")
                         + " et un niveau de force de : " + rs.getString("NiveauForce") + " avec une arme qui est : " + rs.getString("Weapon")
                         + " et une défense qui est : " + rs.getString("Bouclier"));
-                if (rs.getString("Type").equals("warrior")){
-                    CharacterPlayer c = new Guerrier(rs.getInt("Id"),rs.getString("Type"),rs.getString("Nom"),
-                            rs.getInt("NiveauVie"),rs.getInt("NiveauForce"),rs.getString("Weapon"),rs.getString("Bouclier"));
+                if (rs.getString("Type").equals("warrior")) {
+                    this.characterPlayer = new Guerrier(rs.getInt("NiveauForce"), rs.getInt("NiveauVie"), rs.getString("Nom"),
+                            rs.getString("Type"), equipementOffensif(id), equipementDefensif(id));
+                }
+                else {
+                    this.characterPlayer = new Magician(rs.getInt("NiveauForce"), rs.getInt("NiveauVie"), rs.getString("Nom"),
+                            rs.getString("Type"), equipementOffensif(id), equipementDefensif(id));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        return this.characterPlayer;
     }
 
-    public void getMenu(CharacterPlayer perso1) {
-        changeName(perso1);
+    public void getMenu(CharacterPlayer perso1,String choice) {
+        if (choice.equals("1")){
+            changeName(perso1, dbConnection.takeIdFromBDD());
+        }
         showStats(perso1);
         menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
     }
 
-    public String defineNameCharacter() {
-        String characterName;
-        System.out.println("Veuillez maintenant definir un nom pour votre heros");
-        characterName = myObj.nextLine().toLowerCase();
-        return characterName;
-    }
-
     public String choiceMenu() {
         String choiceMenu;
-        System.out.println(ANSI_BLUE + "Vous pouvez consulter votre personnage en tapant 1, changer de personnage ou de nom en tapant 2 et si tout est ok, ON ATTAQUE ! en tapant 3" + ANSI_RESET);
+        System.out.println(ANSI_BLUE + "Vous pouvez consulter votre personnage en tapant 1, changer de personnage ou de nom en tapant 2 et si tout est ok, ON ATTAQUE ! en tapant 3. Enfin vous pouvez quitter le jeu en tapant une autre touche" + ANSI_RESET);
         choiceMenu = myObj.nextLine().toLowerCase();
         return choiceMenu;
     }
 
-    public String choiceChangement() {
+    public String choiceChangment() {
         String choiceChangement;
         System.out.println("1 pour changer de personnage, 2 pour changer de nom");
         choiceChangement = myObj.nextLine().toLowerCase();
@@ -180,19 +207,21 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
                     System.out.println(defend1);
                     break;
                 case "2":
-                    choiceChangement();
-                    if (choiceChangement().equals("1")) {
+                    choiceChangment();
+                    if (choiceChangment().equals("1")) {
                         String name = getCharacterType();
-                        perso1 = createCharacter(name);
+                        perso1 = instanceCharacterType(name);
                         attack1 = perso1.getAttackObject();
                         defend1 = perso1.getDefendObject();
-                    } else if (choiceChangement().equals("2")) {
-                        perso1.setName(defineNameCharacter());
+                    } else if (choiceChangment().equals("2")) {
+                        changeName(perso1, dbConnection.takeIdFromBDD());
                     }
                     break;
                 case "3":
                     System.out.println("Bienvenue dans D&D !");
                     break;
+                case "4":
+                    System.exit(0);
             }
         } while (!choixUtilisateur.equals("3"));
     }
@@ -203,21 +232,18 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         System.out.println(perso.getDefendObject());
     }
 
-    public void changeName(CharacterPlayer perso) {
-        String characterName = defineNameCharacter();
+    public void changeName(CharacterPlayer perso, int id) {
+        String characterName;
+        System.out.println("Veuillez maintenant definir un nom pour votre heros");
+        characterName = myObj.nextLine();
         try {
-            Statement st = dbConnection.connectionDB();
-            st.executeUpdate("UPDATE Hero SET `Nom`='" + characterName + "'");
-//            "UPDATE EMPLOYE SET ID = '"+tfIDemploye.getText()+"',nom='"+tfnomemploye.getText()+"', prenom='"+tfprenomemploye.getText()+"', " +
-//                    "salaire='"+tfsalaireemploye.getText()+"', age='"+tfageemploye.getText()+"' where ID = "ID de l'enregistrement à modifier"
+            Statement st = dbConnection.connectToDBB();
+            st.executeUpdate("UPDATE Hero SET `Nom` = '"+characterName +"' WHERE ID = "+ id +"");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-//        perso.setName(characterName);
-//        System.out.println("Votre personnage s'appelle désormais : " + characterName);
-
-//        System.out.println(perso);
+        perso.setName(characterName);
+        System.out.println("Votre personnage s'appelle désormais : " + characterName);
     }
 
     public void printEnd() {
@@ -241,7 +267,6 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
 
     public void startPhrase() {
         System.out.println("C'est parti ! Votre objectif sera d'atteindre la case 64. Bonne chance !");
-
     }
 
     @Override
@@ -272,6 +297,12 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         System.out.println(typeYouAreEquiped);
         System.out.println("Vous etes deja equipe de cette arme");
     }
+
+//    @Override
+//    public Statement connectToDBB() {
+//        Statement st = dbConnection.connectionDB();
+//        return st;
+//    }
 }
 
 

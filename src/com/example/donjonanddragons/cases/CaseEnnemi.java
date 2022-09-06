@@ -1,9 +1,12 @@
 package com.example.donjonanddragons.cases;
 
+import com.example.donjonanddragons.ConnectionDBBInterface;
 import com.example.donjonanddragons.FightInteractions;
 import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -17,14 +20,17 @@ public class CaseEnnemi extends Case {
 
     boolean areYouDead = false;
 
+    ConnectionDBBInterface connectionDBBInterface;
+
     /**
      * Constructeur de ma class CaseEnnemi
      * @param ennemiRace
      * @param fightInteractions
      */
-    public CaseEnnemi(Ennemi ennemiRace, FightInteractions fightInteractions) {
+    public CaseEnnemi(Ennemi ennemiRace, FightInteractions fightInteractions, ConnectionDBBInterface connectionDBBInterface) {
         this.ennemi = ennemiRace;
         this.fightInteractions = fightInteractions;
+        this.connectionDBBInterface = connectionDBBInterface;
     }
 
 
@@ -50,9 +56,14 @@ public class CaseEnnemi extends Case {
      */
     @Override
     public void interaction(CharacterPlayer character) {
+
+    }
+
+    @Override
+    public void interaction(CharacterPlayer character, int id) {
         boolean areYouAttacking;
         do {
-             areYouAttacking = this.fightInteractions.userWantToFlee();
+            areYouAttacking = this.fightInteractions.userWantToFlee();
             this.isNowEmpty = false;
             if (areYouAttacking) {
                 int somme = character.getPower() + character.getAttackObject().getLevel();
@@ -64,6 +75,7 @@ public class CaseEnnemi extends Case {
                 } else {
                     this.fightInteractions.displayEnnemySurvive(ennemi.getLife());
                     character.setLife(character.getLife() - ennemi.getAttack());
+                    updateLifeInBDD(character, id);
                     if (character.getLife() <= 0) {
                         this.fightInteractions.displayYouAreDead(character.getLife());
                         areYouDead = true;
@@ -76,7 +88,6 @@ public class CaseEnnemi extends Case {
                 this.didYouComeBack = true;
             }
         } while (character.getLife() > 0 && this.ennemi.getLife() > 0 && areYouAttacking);
-
     }
 
     /**
@@ -92,6 +103,15 @@ public class CaseEnnemi extends Case {
             plateau.set(position - 1, new CaseVide());
         }
         return areYouDead;
+    }
+
+    public void updateLifeInBDD(CharacterPlayer characterPlayer, int id){
+        try {
+            Statement st= connectionDBBInterface.connectToDBB();
+            st.executeUpdate("UPDATE Hero SET `NiveauVie` = '"+ characterPlayer.getLife() +"' WHERE ID = "+ id +"");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

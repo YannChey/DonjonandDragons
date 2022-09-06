@@ -15,15 +15,15 @@ public abstract class CharacterPlayer implements Combattants {
     int position;
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
-//TODO  (param du constructeur si j'utilise super)
+
     public CharacterPlayer(int power, int life, String name, String type, EquipementOffensif attackObject, EquipementDefensif defendObject) {
-//        this.power = power;
-//        this.life = life;
-//        this.name = name;
-//        this.attackObject = attackObject;
-//        this.defendObject = defendObject;
-//        this.position = 1;
-//        this.type = type;
+        this.position = 1;
+        this.power = power;
+        this.life = life;
+        this.name = name;
+        this.type = type;
+        this.attackObject = attackObject;
+        this.defendObject = defendObject;
     }
 
     public String toString() {

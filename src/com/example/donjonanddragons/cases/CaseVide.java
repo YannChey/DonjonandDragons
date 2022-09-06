@@ -20,6 +20,11 @@ public class CaseVide extends Case {
     }
 
     @Override
+    public void interaction(CharacterPlayer character, int id) {
+
+    }
+
+    @Override
     public boolean consequences(ArrayList<Case> plateau, int position) {
         return false;
     }

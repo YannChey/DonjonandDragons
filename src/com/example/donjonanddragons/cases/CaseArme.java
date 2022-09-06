@@ -1,22 +1,28 @@
 package com.example.donjonanddragons.cases;
 
 import com.example.donjonanddragons.ArmeInteractions;
+import com.example.donjonanddragons.ConnectionDBBInterface;
 import com.example.donjonanddragons.equipements.armes.attaque.*;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CaseArme extends Case {
     private EquipementOffensif weapon;
     boolean isNowEmpty;
 
+    private ConnectionDBBInterface connectionDBBInterface;
+
     ArmeInteractions armeInteractions;
-    public CaseArme(EquipementOffensif arme, ArmeInteractions armeInteractions){
+    public CaseArme(EquipementOffensif arme, ArmeInteractions armeInteractions, ConnectionDBBInterface connectionDBBInterface){
 //        this.weapon = this.weapon();
         this.weapon = arme;
         this.armeInteractions = armeInteractions;
+        this.connectionDBBInterface = connectionDBBInterface;
     }
 
     public EquipementOffensif weapon(){
@@ -43,23 +49,26 @@ public class CaseArme extends Case {
 
     @Override
     public void interaction(CharacterPlayer character) {
+
+    }
+
+    @Override
+    public void interaction(CharacterPlayer character, int id) {
         this.isNowEmpty = false;
         if (character instanceof Guerrier guerrier){
             if(this.weapon.getType().equals("Arme")&& !this.weapon.getName().equals(guerrier.getAttackObject().getName())){
-                guerrier.setAttackObject(this.weapon);
-                this.isNowEmpty = true;
+                setWeaponOnCharacter(guerrier,id);
             }else if(this.weapon.getName().equals(guerrier.getAttackObject().getName())){
-                armeInteractions.displayYouAreEquiped(guerrier.getAttackObject().getType(),this.weapon.getName());
+                displayWeaponAlreadyWeared(guerrier);
             }
             else{
                 armeInteractions.displayYouCantTakeThisWeapon();
             }
         }else if (character instanceof Magician magician){
             if(this.weapon.getType().equals("Sort")&& !this.weapon.getName().equals(magician.getAttackObject().getName())){
-                magician.setAttackObject(this.weapon);
-                this.isNowEmpty = true;
+                setWeaponOnCharacter(magician, id);
             }else if(this.weapon.getName().equals(magician.getAttackObject().getName())){
-                armeInteractions.displayYouAreAlreadyEquiped(this.weapon.getName(),magician.getAttackObject().getType());
+                displayWeaponAlreadyWeared(magician);
             }
             else{
                 System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
@@ -76,4 +85,25 @@ public class CaseArme extends Case {
         }
         return false;
     }
+
+    public void updateWeaponInBDD(int id){
+        try {
+            Statement st= connectionDBBInterface.connectToDBB();
+            st.executeUpdate("UPDATE Hero SET `Weapon` = '"+ this.weapon.getName() +"' WHERE ID = "+ id +"");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Vous portez désormais : " + this.weapon.getName());
+    }
+
+    public void setWeaponOnCharacter(CharacterPlayer characterPlayer, int id){
+        characterPlayer.setAttackObject(this.weapon);
+        updateWeaponInBDD(id);
+        this.isNowEmpty = true;
+    }
+    public void displayWeaponAlreadyWeared(CharacterPlayer characterPlayer){
+        armeInteractions.displayYouAreAlreadyEquiped(this.weapon.getName(),characterPlayer.getAttackObject().getType());
+    }
+
+
 }

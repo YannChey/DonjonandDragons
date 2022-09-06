@@ -6,7 +6,6 @@ public class Massue extends Arme {
     public Massue(){
         super(3,"une massue");
     }
-
     @Override
     public String toString() {
         return super.toString();

@@ -9,22 +9,10 @@ import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif
 public class Guerrier extends CharacterPlayer {
      public Guerrier(){
          super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier());
-//         setLife(10);
-//         setPower(10);
-//         setName("name");
-//         setType("warrior");
-//         setAttackObject(getAttackObject());
-//         setDefendObject(getDefendObject());
      }
      //TODO IL FAUT REGLER LE PROBLEME DE L'APPEL DE LA METHODE GETCHARACTERFROMDB
      public Guerrier(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif){
-         super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier());
-         this.setPower(power);
-         this.setLife(life);
-         this.setName(name);
-         this.setType(type);
-         this.setAttackObject(equipementOffensif);
-         this.setDefendObject(equipementDefensif);
+         super(power,life,name,type,equipementOffensif,equipementDefensif);
      }
 
     @Override
