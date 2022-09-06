@@ -162,8 +162,7 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
                 if (rs.getString("Type").equals("warrior")) {
                     this.characterPlayer = new Guerrier(rs.getInt("NiveauForce"), rs.getInt("NiveauVie"), rs.getString("Nom"),
                             rs.getString("Type"), equipementOffensif(id), equipementDefensif(id));
-                }
-                else {
+                } else {
                     this.characterPlayer = new Magician(rs.getInt("NiveauForce"), rs.getInt("NiveauVie"), rs.getString("Nom"),
                             rs.getString("Type"), equipementOffensif(id), equipementDefensif(id));
                 }
@@ -174,8 +173,8 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         return this.characterPlayer;
     }
 
-    public void getMenu(CharacterPlayer perso1,String choice) {
-        if (choice.equals("1")){
+    public void getMenu(CharacterPlayer perso1, String choice) {
+        if (choice.equals("1")) {
             changeName(perso1, dbConnection.takeIdFromBDD());
         }
         showStats(perso1);
@@ -238,7 +237,7 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         characterName = myObj.nextLine();
         try {
             Statement st = dbConnection.connectToDBB();
-            st.executeUpdate("UPDATE Hero SET `Nom` = '"+characterName +"' WHERE ID = "+ id +"");
+            st.executeUpdate("UPDATE Hero SET `Nom` = '" + characterName + "' WHERE ID = " + id + "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -255,11 +254,14 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         System.out.println("Le resultat de votre lancer de des est : " + DiceResult + ". Votre nouvelle position est : " + new_position + "/" + plateau.toArray().length);
     }
 
-    public void scanLetThrowDices() {
+    public String scanLetThrowDices() {
+        String num;
         Scanner turnplay = new Scanner(System.in);
-        System.out.println(ANSI_RED + "Veuillez lancer les des (cliquez sur enter)" + ANSI_RESET);
-        turnplay.nextLine();
+        System.out.println(ANSI_RED + "Veuillez lancer les des (cliquez sur enter), vous pouvez aussi cliquer sur 1 pour revenir au menu ou sur 2 pour quitter le jeu" + ANSI_RESET);
+        return num = turnplay.nextLine();
     }
+
+    //TODO VOIR POUR GERER LE RETOUR DU MENU ET L'EXIT
 
     public int scanChoiceEnd() {
         return myObj.nextInt();

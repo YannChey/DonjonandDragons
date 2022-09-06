@@ -43,13 +43,13 @@ public class Game {
             } else if (i <= 32) {
                 plateau.add(new CaseCaisse(new BigPotion(), new Menu(), new DBConnection()));
             } else if (i <= 37) {
-                plateau.add(new CaseArme(new Massue(),new Menu(),new DBConnection()));
+                plateau.add(new CaseArme(new Massue(), new Menu(), new DBConnection()));
             } else if (i <= 41) {
-                plateau.add(new CaseArme(new Epee(),new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new Epee(), new Menu(), new DBConnection()));
             } else if (i <= 46) {
-                plateau.add(new CaseArme(new Eclair(),new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new Eclair(), new Menu(), new DBConnection()));
             } else if (i <= 48) {
-                plateau.add(new CaseArme(new FireBall(),new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new FireBall(), new Menu(), new DBConnection()));
             } else {
                 plateau.add(new CaseVide());
             }
@@ -66,10 +66,10 @@ public class Game {
         this.state = GameState.DEBUT;
     }
 
-    public void start(){
+    public void start() {
         String num = menu.makeAChoice();
         perso1 = menu.menuSwap(num);
-        menu.getMenu(perso1,num);
+        menu.getMenu(perso1, num);
         generateBoard();
 //        for (Case aCase : plateau) {
 //            System.out.println(aCase.getClass().getName());
@@ -80,15 +80,21 @@ public class Game {
 
     public void next_turn() {
         while (continuePlay && !this.state.equals(GameState.FIN)) {
-           menu.scanLetThrowDices();
-            try {
-                movePlayer();
-            } catch (PersonnageHorsPlateauException e) {
-                e.printStackTrace();
-                System.out.println("Bravo ! Vous avez gagne ! ");
-                perso1.setPosition(plateau.toArray().length);
-                this.state = GameState.FIN;
-                continuePlay = false;
+            String choice = menu.scanLetThrowDices();
+            if (choice.equals("1")) {
+
+            } else if (choice.equals("2")) {
+
+            } else {
+                try {
+                    movePlayer();
+                } catch (PersonnageHorsPlateauException e) {
+                    e.printStackTrace();
+                    System.out.println("Bravo ! Vous avez gagne ! ");
+                    perso1.setPosition(plateau.toArray().length);
+                    this.state = GameState.FIN;
+                    continuePlay = false;
+                }
             }
         }
     }
@@ -111,12 +117,12 @@ public class Game {
         currentCase.interaction(perso1);
         currentCase.interaction(perso1, menu.id);
         boolean areYouDead = currentCase.consequences(plateau, perso1.getPosition());
-        if(areYouDead){
+        if (areYouDead) {
             this.state = GameState.FIN;
             System.out.println("Vous avez perdu...");
         }
-        if (currentCase instanceof CaseEnnemi caseEnnemi){
-            if(caseEnnemi.turnBack()){
+        if (currentCase instanceof CaseEnnemi caseEnnemi) {
+            if (caseEnnemi.turnBack()) {
                 int dices = perso1.diceResult();
                 perso1.updateNegativePosition(dices);
                 System.out.println("Vous avez fuit et recule de " + dices + " vous etes a la case " + perso1.getPosition());
@@ -132,7 +138,7 @@ public class Game {
         } else if (choiceEnd == 2) {
             menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
             resetGame();
-        } else{
+        } else {
             System.exit(0);
         }
     }
