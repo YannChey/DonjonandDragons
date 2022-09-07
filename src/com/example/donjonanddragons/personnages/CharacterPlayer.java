@@ -1,11 +1,8 @@
 package com.example.donjonanddragons.personnages;
 
-import com.example.donjonanddragons.Combattants;
+import com.example.donjonanddragons.inter.Combattants;
 import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif;
 import com.example.donjonanddragons.equipements.armes.attaque.EquipementOffensif;
-
-import java.awt.*;
-import java.sql.*;
 
 public abstract class CharacterPlayer implements Combattants {
     private int power;

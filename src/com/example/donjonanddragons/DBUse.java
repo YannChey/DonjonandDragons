@@ -1,10 +1,12 @@
 package com.example.donjonanddragons;
 
+import com.example.donjonanddragons.inter.ConnectionDBBInterface;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBUse implements ConnectionDBBInterface{
+public class DBUse implements ConnectionDBBInterface {
     public Statement connectToDBB(){
         Connection cn = null;
         try {

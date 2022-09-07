@@ -1,4 +1,4 @@
-package com.example.donjonanddragons;
+package com.example.donjonanddragons.inter;
 
 import java.sql.Statement;
 

@@ -1,6 +1,6 @@
 package com.example.donjonanddragons.ennemis;
 
-import com.example.donjonanddragons.Combattants;
+import com.example.donjonanddragons.inter.Combattants;
 
 public class Ennemi implements Combattants {
     private String name;

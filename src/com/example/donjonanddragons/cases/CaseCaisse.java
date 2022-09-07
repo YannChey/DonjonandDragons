@@ -1,7 +1,7 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.CaisseInteractions;
-import com.example.donjonanddragons.ConnectionDBBInterface;
+import com.example.donjonanddragons.inter.CaisseInteractions;
+import com.example.donjonanddragons.inter.ConnectionDBBInterface;
 import com.example.donjonanddragons.equipements.potions.Potion;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 

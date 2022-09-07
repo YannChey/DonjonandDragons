@@ -1,7 +1,7 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.ArmeInteractions;
-import com.example.donjonanddragons.ConnectionDBBInterface;
+import com.example.donjonanddragons.inter.ArmeInteractions;
+import com.example.donjonanddragons.inter.ConnectionDBBInterface;
 import com.example.donjonanddragons.equipements.armes.attaque.*;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;

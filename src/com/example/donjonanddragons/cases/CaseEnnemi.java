@@ -1,7 +1,7 @@
 package com.example.donjonanddragons.cases;
 
-import com.example.donjonanddragons.ConnectionDBBInterface;
-import com.example.donjonanddragons.FightInteractions;
+import com.example.donjonanddragons.inter.ConnectionDBBInterface;
+import com.example.donjonanddragons.inter.FightInteractions;
 import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 

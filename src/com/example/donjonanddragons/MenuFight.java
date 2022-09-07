@@ -1,8 +1,10 @@
 package com.example.donjonanddragons;
 
+import com.example.donjonanddragons.inter.FightInteractions;
+
 import java.util.Scanner;
 
-public class MenuFight implements FightInteractions{
+public class MenuFight implements FightInteractions {
 
     public boolean scanChoiceAttackEnnemi(){
         String areYouAttacking;

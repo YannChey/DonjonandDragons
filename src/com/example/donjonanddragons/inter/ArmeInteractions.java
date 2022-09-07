@@ -1,4 +1,4 @@
-package com.example.donjonanddragons;
+package com.example.donjonanddragons.inter;
 
 public interface ArmeInteractions {
     void displayYouAreEquiped(String type, String weaponName);
