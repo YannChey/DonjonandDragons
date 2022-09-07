@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBConnection implements ConnectionDBBInterface{
+public class DBUse implements ConnectionDBBInterface{
     public Statement connectToDBB(){
         Connection cn = null;
         try {

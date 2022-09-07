@@ -6,4 +6,9 @@ public interface ArmeInteractions {
     void displayYouCantTakeThisWeapon();
 
     void displayYouAreAlreadyEquiped(String weaponName, String typeYouAreEquiped);
+
+    String displayChooseIfYouWantThisWeapon();
+
+    void displayDontTakeThisWeapon();
+
 }

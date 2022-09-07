@@ -2,7 +2,7 @@ package com.example.donjonanddragons.ennemis;
 
 public class Dragon extends Ennemi {
     public Dragon(){
-        super("Dragon",4,45);
+        super("Dragon",40,45);
     }
 
     @Override

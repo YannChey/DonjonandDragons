@@ -45,6 +45,9 @@ public abstract class CharacterPlayer implements Combattants {
 
     public void updateNegativePosition(int dices) {
         this.position = this.position - dices;
+        if(this.position < 0){
+            this.position = 0;
+        }
     }
 
     public String getName() {

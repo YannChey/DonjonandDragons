@@ -14,9 +14,7 @@ import java.util.ArrayList;
 public class CaseArme extends Case {
     private EquipementOffensif weapon;
     boolean isNowEmpty;
-
     private ConnectionDBBInterface connectionDBBInterface;
-
     ArmeInteractions armeInteractions;
     public CaseArme(EquipementOffensif arme, ArmeInteractions armeInteractions, ConnectionDBBInterface connectionDBBInterface){
 //        this.weapon = this.weapon();
@@ -57,7 +55,12 @@ public class CaseArme extends Case {
         this.isNowEmpty = false;
         if (character instanceof Guerrier guerrier){
             if(this.weapon.getType().equals("Arme")&& !this.weapon.getName().equals(guerrier.getAttackObject().getName())){
-                setWeaponOnCharacter(guerrier,id);
+                String choice = armeInteractions.displayChooseIfYouWantThisWeapon();
+                if(choice.equals("oui")){
+                    setWeaponOnCharacter(guerrier,id);
+                }else{
+                    armeInteractions.displayDontTakeThisWeapon();
+                }
             }else if(this.weapon.getName().equals(guerrier.getAttackObject().getName())){
                 displayWeaponAlreadyWeared(guerrier);
             }
@@ -66,12 +69,17 @@ public class CaseArme extends Case {
             }
         }else if (character instanceof Magician magician){
             if(this.weapon.getType().equals("Sort")&& !this.weapon.getName().equals(magician.getAttackObject().getName())){
-                setWeaponOnCharacter(magician, id);
+                String choice = armeInteractions.displayChooseIfYouWantThisWeapon();
+                if(choice.equals("oui")){
+                    setWeaponOnCharacter(magician,id);
+                }else{
+                    armeInteractions.displayDontTakeThisWeapon();
+                }
             }else if(this.weapon.getName().equals(magician.getAttackObject().getName())){
                 displayWeaponAlreadyWeared(magician);
             }
             else{
-                System.out.println("Vous ne pouvez pas equiper cette arme car elle ne fait pas parti de votre categorie");
+                armeInteractions.displayYouCantTakeThisWeapon();
             }
 
             //TODO FINIR DE REFACTO CASEARME

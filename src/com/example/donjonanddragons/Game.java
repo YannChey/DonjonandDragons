@@ -22,6 +22,8 @@ public class Game {
     private final ArrayList<Case> plateau = new ArrayList<>();
     GameState state = GameState.WELCOME;
 
+    boolean areYouDead;
+
     boolean continuePlay = true;
 
     public Game() {
@@ -33,23 +35,23 @@ public class Game {
         plateau.clear();
         for (int i = 1; i < 65; i++) {
             if (i <= 10) {
-                plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight(), new DBConnection()));
+                plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight(), new DBUse()));
             } else if (i <= 20) {
-                plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight(), new DBConnection()));
+                plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight(), new DBUse()));
             } else if (i <= 24) {
-                plateau.add(new CaseEnnemi(new Dragon(), new MenuFight(), new DBConnection()));
+                plateau.add(new CaseEnnemi(new Dragon(), new MenuFight(), new DBUse()));
             } else if (i <= 30) {
-                plateau.add(new CaseCaisse(new StandardPotion(), new Menu(), new DBConnection()));
+                plateau.add(new CaseCaisse(new StandardPotion(), new Menu(), new DBUse()));
             } else if (i <= 32) {
-                plateau.add(new CaseCaisse(new BigPotion(), new Menu(), new DBConnection()));
+                plateau.add(new CaseCaisse(new BigPotion(), new Menu(), new DBUse()));
             } else if (i <= 37) {
-                plateau.add(new CaseArme(new Massue(), new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new Massue(), new Menu(), new DBUse()));
             } else if (i <= 41) {
-                plateau.add(new CaseArme(new Epee(), new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new Epee(), new Menu(), new DBUse()));
             } else if (i <= 46) {
-                plateau.add(new CaseArme(new Eclair(), new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new Eclair(), new Menu(), new DBUse()));
             } else if (i <= 48) {
-                plateau.add(new CaseArme(new FireBall(), new Menu(), new DBConnection()));
+                plateau.add(new CaseArme(new FireBall(), new Menu(), new DBUse()));
             } else {
                 plateau.add(new CaseVide());
             }
@@ -82,9 +84,9 @@ public class Game {
         while (continuePlay && !this.state.equals(GameState.FIN)) {
             String choice = menu.scanLetThrowDices();
             if (choice.equals("1")) {
-
+                this.state = GameState.FIN;
             } else if (choice.equals("2")) {
-
+                System.exit(0);
             } else {
                 try {
                     movePlayer();
@@ -116,31 +118,41 @@ public class Game {
         currentCase.aEvent();
         currentCase.interaction(perso1);
         currentCase.interaction(perso1, menu.id);
-        boolean areYouDead = currentCase.consequences(plateau, perso1.getPosition());
+        this.areYouDead = currentCase.consequences(plateau, perso1.getPosition());
         if (areYouDead) {
+            menu.removeCharacterFromBDD(menu.id);
             this.state = GameState.FIN;
-            System.out.println("Vous avez perdu...");
+            menu.youLost();
         }
         if (currentCase instanceof CaseEnnemi caseEnnemi) {
             if (caseEnnemi.turnBack()) {
                 int dices = perso1.diceResult();
                 perso1.updateNegativePosition(dices);
-                System.out.println("Vous avez fuit et recule de " + dices + " vous etes a la case " + perso1.getPosition());
+                menu.youFear(dices,perso1);
             }
         }
     }
 
     public void end() {
-        menu.printEnd();
-        int choiceEnd = menu.scanChoiceEnd();
-        if (choiceEnd == 1) {
-            resetGame();
-        } else if (choiceEnd == 2) {
-            menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
-            resetGame();
+        if (this.areYouDead) {
+            if(menu.chooseRestartOrNot().equals("oui")){
+                this.state = GameState.WELCOME;
+            }else{
+                System.exit(0);
+            }
         } else {
-            System.exit(0);
+            menu.printEnd();
+            int choiceEnd = menu.scanChoiceEnd();
+            if (choiceEnd == 1) {
+                resetGame();
+            } else if (choiceEnd == 2) {
+                menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
+                resetGame();
+            } else {
+                System.exit(0);
+            }
         }
+
     }
 
     public void runGame() {
