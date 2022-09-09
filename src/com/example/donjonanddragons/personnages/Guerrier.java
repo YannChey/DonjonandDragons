@@ -11,8 +11,8 @@ public class Guerrier extends CharacterPlayer {
          super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier(),1);
      }
      //TODO IL FAUT REGLER LE PROBLEME DE L'APPEL DE LA METHODE GETCHARACTERFROMDB
-     public Guerrier(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif){
-         super(power,life,name,type,equipementOffensif,equipementDefensif);
+     public Guerrier(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif,int position){
+         super(power,life,name,type,equipementOffensif,equipementDefensif,position);
      }
 
     @Override

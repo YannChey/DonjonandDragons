@@ -41,7 +41,7 @@ public class DBUse implements ConnectionDBBInterface {
                 System.out.println("Votre personnage : " + rs.getString("Id") + " de type : " + rs.getString("Type") +
                         " qui a comme nom : " + rs.getString("Nom") + " d'un niveau de vie de : " + rs.getString("NiveauVie")
                         + " et un niveau de force de : " + rs.getString("NiveauForce") + " avec une arme qui est : " + rs.getString("Weapon")
-                        + " et une défense qui est : " + rs.getString("Bouclier"));
+                        + " et une défense qui est : " + rs.getString("Bouclier") + " a la position : " + rs.getInt("Position"));
                 IdList.add(Integer.valueOf(rs.getString("Id")));
             }
         } catch (SQLException e) {

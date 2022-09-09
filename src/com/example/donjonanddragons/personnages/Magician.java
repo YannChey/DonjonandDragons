@@ -12,8 +12,8 @@ public class Magician extends CharacterPlayer {
         super(15,6,"Magician","Magician", new BaseArme(),new Philtre(),1);
     }
 
-    public Magician(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif){
-        super(power,life,name,type,equipementOffensif,equipementDefensif);
+    public Magician(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif,int position){
+        super(power,life,name,type,equipementOffensif,equipementDefensif,position);
     }
 
     @Override

@@ -11,8 +11,11 @@ import com.example.donjonanddragons.equipements.armes.attaque.Massue;
 import com.example.donjonanddragons.equipements.potions.BigPotion;
 import com.example.donjonanddragons.equipements.potions.StandardPotion;
 import com.example.donjonanddragons.exceptions.PersonnageHorsPlateauException;
+import com.example.donjonanddragons.inter.ConnectionDBBInterface;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -30,32 +33,32 @@ public class Game {
     }
 
     private void generateBoard() {
-        plateau.clear();
-        for (int i = 1; i < 65; i++) {
-            if (i <= 10) {
-                plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight(), new DBUse()));
-            } else if (i <= 20) {
-                plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight(), new DBUse()));
-            } else if (i <= 24) {
-                plateau.add(new CaseEnnemi(new Dragon(), new MenuFight(), new DBUse()));
-            } else if (i <= 30) {
-                plateau.add(new CaseCaisse(new StandardPotion(), new Menu(), new DBUse()));
-            } else if (i <= 32) {
-                plateau.add(new CaseCaisse(new BigPotion(), new Menu(), new DBUse()));
-            } else if (i <= 37) {
-                plateau.add(new CaseArme(new Massue(), new Menu(), new DBUse()));
-            } else if (i <= 41) {
-                plateau.add(new CaseArme(new Epee(), new Menu(), new DBUse()));
-            } else if (i <= 46) {
-                plateau.add(new CaseArme(new Eclair(), new Menu(), new DBUse()));
-            } else if (i <= 48) {
-                plateau.add(new CaseArme(new FireBall(), new Menu(), new DBUse()));
-            } else {
-                plateau.add(new CaseVide());
+            plateau.clear();
+            for (int i = 1; i < 65; i++) {
+                if (i <= 10) {
+                    plateau.add(new CaseEnnemi(new Gobelin(), new MenuFight(), new DBUse()));
+                } else if (i <= 20) {
+                    plateau.add(new CaseEnnemi(new Sorcier(), new MenuFight(), new DBUse()));
+                } else if (i <= 24) {
+                    plateau.add(new CaseEnnemi(new Dragon(), new MenuFight(), new DBUse()));
+                } else if (i <= 30) {
+                    plateau.add(new CaseCaisse(new StandardPotion(), new Menu(), new DBUse()));
+                } else if (i <= 32) {
+                    plateau.add(new CaseCaisse(new BigPotion(), new Menu(), new DBUse()));
+                } else if (i <= 37) {
+                    plateau.add(new CaseArme(new Massue(), new Menu(), new DBUse()));
+                } else if (i <= 41) {
+                    plateau.add(new CaseArme(new Epee(), new Menu(), new DBUse()));
+                } else if (i <= 46) {
+                    plateau.add(new CaseArme(new Eclair(), new Menu(), new DBUse()));
+                } else if (i <= 48) {
+                    plateau.add(new CaseArme(new FireBall(), new Menu(), new DBUse()));
+                } else {
+                    plateau.add(new CaseVide());
+                }
             }
+            shuffle(this.plateau);
         }
-        shuffle(this.plateau);
-    }
 
     public static <T> void shuffle(ArrayList<T> plateau) {
         Collections.shuffle(plateau);
@@ -70,10 +73,12 @@ public class Game {
         String num = menu.makeAChoice();
         perso1 = menu.menuSwap(num);
         menu.getMenu(perso1, num);
-        generateBoard();
-//        for (Case aCase : plateau) {
-//            System.out.println(aCase.getClass().getName());
-//        }
+        if(perso1.getPosition() == 1) {
+            generateBoard();
+        }
+        for (Case aCase : plateau) {
+            System.out.println(aCase.getClass().getName());
+        }
         menu.startPhrase();
         this.state = GameState.JEU;
     }
@@ -103,6 +108,7 @@ public class Game {
         int throughtDices = perso1.diceResult();
 //        throughDices = 1;
         perso1.updatePosition(throughtDices);
+        menu.updatePositionOnDB(perso1);
         if (perso1.getPosition() < plateau.toArray().length) {
             menu.printDiceResult(throughtDices, perso1.getPosition(), plateau);
             evenements();
@@ -141,9 +147,13 @@ public class Game {
             menu.printEnd();
             int choiceEnd = menu.scanChoiceEnd();
             if (choiceEnd == 1) {
+                perso1.setPosition(1);
+                menu.updatePositionOnDB(perso1);
                 resetGame();
             } else if (choiceEnd == 2) {
                 menu.menuSelect(perso1, perso1.getAttackObject(), perso1.getDefendObject());
+                perso1.setPosition(1);
+                menu.updatePositionOnDB(perso1);
                 resetGame();
             } else {
                 System.exit(0);
@@ -171,8 +181,11 @@ public class Game {
     }
 
     public void resetGame() {
-        generateBoard();
-        perso1.setPosition(1);
+        if(areYouDead){
+            generateBoard();
+            perso1.setPosition(1);
+            menu.updatePositionOnDB(perso1);
+        }
         this.state = GameState.JEU;
         continuePlay = true;
     }

@@ -9,7 +9,7 @@ public abstract class CharacterPlayer implements Combattants {
     private int life;
     private String name;
     private String type;
-    int position;
+    private int position;
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
 
@@ -102,4 +102,5 @@ public abstract class CharacterPlayer implements Combattants {
     public void setType(String type) {
         this.type = type;
     }
+
 }

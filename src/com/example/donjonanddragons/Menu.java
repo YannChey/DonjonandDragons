@@ -49,7 +49,7 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         CharacterPlayer perso1;
         if (num.equals("1")) {
             perso1 = insertCharacterIntoBDD();
-            dbUse.takeIdFromBDD();
+            this.id = dbUse.takeIdFromBDD();
         } else {
             List idList = dbUse.displayCharactersFromBDD();
             int id = selectCharacterFromBDD(idList);
@@ -94,13 +94,14 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         String name = getCharacterType();
         CharacterPlayer characterPlayer = instanceCharacterType(name);
         try {
-            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("INSERT INTO Hero(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`) values (?,?,?,?,?,?)");
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("INSERT INTO Hero(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`,`Position`) values (?,?,?,?,?,?,?)");
             stmt.setString(1,name);
             stmt.setString(2,characterPlayer.getName());
             stmt.setInt(3,characterPlayer.getLife());
             stmt.setInt(4,characterPlayer.getPower());
             stmt.setString(5,characterPlayer.getAttackObject().getName());
             stmt.setString(6,characterPlayer.getDefendObject().getName());
+            stmt.setInt(7,characterPlayer.getPosition());
             stmt.executeUpdate();
 //            Statement st = dbUse.connectToDBB();
 //            st.executeUpdate("INSERT INTO `hero`(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`) " +
@@ -185,13 +186,13 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
                 System.out.println("Votre personnage : " + rs.getString("Id") + " de type : " + rs.getString("Type") +
                         " qui a comme nom : " + rs.getString("Nom") + " d'un niveau de vie de : " + rs.getString("NiveauVie")
                         + " et un niveau de force de : " + rs.getString("NiveauForce") + " avec une arme qui est : " + rs.getString("Weapon")
-                        + " et une défense qui est : " + rs.getString("Bouclier"));
+                        + " et une défense qui est : " + rs.getString("Bouclier") + ". Vous êtes actuellement à la position : " + rs.getInt("Position"));
                 if (rs.getString("Type").equals("warrior")) {
                     characterPlayer = new Guerrier(rs.getInt("NiveauForce"), rs.getInt("NiveauVie"), rs.getString("Nom"),
-                            rs.getString("Type"), equipementOffensif(id), equipementDefensif(id));
+                            rs.getString("Type"), equipementOffensif(id), equipementDefensif(id),rs.getInt("Position"));
                 } else {
                     characterPlayer = new Magician(rs.getInt("NiveauForce"), rs.getInt("NiveauVie"), rs.getString("Nom"),
-                            rs.getString("Type"), equipementOffensif(id), equipementDefensif(id));
+                            rs.getString("Type"), equipementOffensif(id), equipementDefensif(id),rs.getInt("Position"));
                 }
             }
         } catch (SQLException e) {
@@ -294,7 +295,7 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
     // Méthode qui affiche la fin de la partie et demande un choix à l'utilisateur
     public void printEnd() {
         System.out.println("Partie terminee ! ");
-        System.out.println("Tapez 1 pour recommencer une partie, tapez 2 pour quitter le jeu et revenir dans le menu, tapez 3 pour quitter le jeu");
+        System.out.println("Tapez 1 pour recommencer (ou reprendre) une partie, tapez 2 pour revenir dans le menu, tapez 3 pour quitter le jeu");
     }
 
     public void printDiceResult(int DiceResult, int new_position, ArrayList<Case> plateau) {
@@ -386,6 +387,17 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
 
     public int getId() {
         return id;
+    }
+
+    public void updatePositionOnDB(CharacterPlayer characterPlayer){
+        try{
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("UPDATE Hero SET `Position` = ? WHERE Id = ?");
+            stmt.setInt(1,characterPlayer.getPosition());
+            stmt.setInt(2,this.id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
