@@ -8,7 +8,7 @@ import com.example.donjonanddragons.equipements.armes.defense.EquipementDefensif
 
 public class Guerrier extends CharacterPlayer {
      public Guerrier(){
-         super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier());
+         super(10,10,"Warrior","Warrior",new BaseArme(),new Bouclier(),1);
      }
      //TODO IL FAUT REGLER LE PROBLEME DE L'APPEL DE LA METHODE GETCHARACTERFROMDB
      public Guerrier(int power, int life, String name, String type, EquipementOffensif equipementOffensif, EquipementDefensif equipementDefensif){

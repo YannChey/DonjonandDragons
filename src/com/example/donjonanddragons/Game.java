@@ -20,11 +20,9 @@ public class Game {
     private final Menu menu;
     private CharacterPlayer perso1;
     private final ArrayList<Case> plateau = new ArrayList<>();
-    GameState state = GameState.WELCOME;
-
-    boolean areYouDead;
-
-    boolean continuePlay = true;
+    private GameState state = GameState.WELCOME;
+    private boolean areYouDead;
+    private boolean continuePlay = true;
 
     public Game() {
         this.menu = new Menu();
@@ -116,11 +114,10 @@ public class Game {
     public void evenements() {
         Case currentCase = plateau.get(perso1.getPosition() - 1);
         currentCase.aEvent();
-        currentCase.interaction(perso1);
-        currentCase.interaction(perso1, menu.id);
+        currentCase.interaction(perso1, menu.getId());
         this.areYouDead = currentCase.consequences(plateau, perso1.getPosition());
         if (areYouDead) {
-            menu.removeCharacterFromBDD(menu.id);
+            menu.removeCharacterFromBDD(menu.getId());
             this.state = GameState.FIN;
             menu.youLost();
         }

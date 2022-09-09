@@ -7,6 +7,7 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 public class CaseArme extends Case {
     private EquipementOffensif weapon;
     boolean isNowEmpty;
-    private ConnectionDBBInterface connectionDBBInterface;
-    ArmeInteractions armeInteractions;
+    private final ConnectionDBBInterface connectionDBBInterface;
+    private final ArmeInteractions armeInteractions;
     public CaseArme(EquipementOffensif arme, ArmeInteractions armeInteractions, ConnectionDBBInterface connectionDBBInterface){
 //        this.weapon = this.weapon();
         this.weapon = arme;
@@ -43,11 +44,6 @@ public class CaseArme extends Case {
     public void aEvent() {
         System.out.println("Vous avez trouve une arme ! Celle-ci est : " + weapon.getName());
 //        System.out.println(this.weapon);
-    }
-
-    @Override
-    public void interaction(CharacterPlayer character) {
-
     }
 
     @Override
@@ -96,8 +92,10 @@ public class CaseArme extends Case {
 
     public void updateWeaponInBDD(int id){
         try {
-            Statement st= connectionDBBInterface.connectToDBB();
-            st.executeUpdate("UPDATE Hero SET `Weapon` = '"+ this.weapon.getName() +"' WHERE ID = "+ id +"");
+            PreparedStatement stmt = connectionDBBInterface.connectToDBB().prepareStatement("UPDATE Hero SET `Weapon` = ? WHERE Id = ?");
+            stmt.setString(1,this.weapon.getName());
+            stmt.setInt(2,id);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

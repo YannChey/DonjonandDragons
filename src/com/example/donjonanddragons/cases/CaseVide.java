@@ -5,23 +5,15 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 import java.util.ArrayList;
 
 public class CaseVide extends Case {
-
     public CaseVide() {
 
     }
-
     @Override
     public String toString() {
         return super.toString();
     }
-
-    @Override
-    public void interaction(CharacterPlayer character) {
-    }
-
     @Override
     public void interaction(CharacterPlayer character, int id) {
-
     }
 
     @Override

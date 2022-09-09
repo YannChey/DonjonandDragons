@@ -5,16 +5,16 @@ import com.example.donjonanddragons.inter.ConnectionDBBInterface;
 import com.example.donjonanddragons.equipements.potions.Potion;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CaseCaisse extends Case {
     private final Potion potion;
-
     private final CaisseInteractions caisseInteractions;
     private final ConnectionDBBInterface connectionDBBInterface;
-    boolean isNowEmpty;
+    private boolean isNowEmpty;
     public CaseCaisse(Potion potion, CaisseInteractions caisseInteractions, ConnectionDBBInterface connectionDBBInterface){
 //        this.potion = this.givePotion();
         this.potion = potion;
@@ -25,11 +25,6 @@ public class CaseCaisse extends Case {
     @Override
     public void aEvent() {
         System.out.println(this.potion);
-
-    }
-
-    @Override
-    public void interaction(CharacterPlayer character) {
 
     }
 
@@ -56,8 +51,12 @@ public class CaseCaisse extends Case {
 
     public void updateLifeInBDD(CharacterPlayer characterPlayer, int id){
         try {
-            Statement st= connectionDBBInterface.connectToDBB();
-            st.executeUpdate("UPDATE Hero SET `NiveauVie` = '"+ characterPlayer.getLife() +"' WHERE ID = "+ id +"");
+            PreparedStatement stmt = connectionDBBInterface.connectToDBB().prepareStatement("UPDATE Hero SET `NiveauVie` = ? WHERE Id = ?");
+            stmt.setInt(1,characterPlayer.getLife());
+            stmt.setInt(2,id);
+            stmt.executeUpdate();
+//            Statement st= connectionDBBInterface.connectToDBB().createStatement();
+//            st.executeUpdate("UPDATE Hero SET `NiveauVie` = '"+ characterPlayer.getLife() +"' WHERE ID = "+ id +"");
         } catch (SQLException e) {
             e.printStackTrace();
         }

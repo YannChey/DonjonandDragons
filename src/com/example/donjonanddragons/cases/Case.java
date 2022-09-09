@@ -16,11 +16,7 @@ public abstract class Case {
        return "";
     }
 
-    public abstract void interaction(CharacterPlayer character);
-
     public abstract void interaction(CharacterPlayer character, int id);
 
     public abstract boolean consequences(ArrayList<Case> plateau, int position);
-
-    //    public abstract Optional<Object> getContent();
 }

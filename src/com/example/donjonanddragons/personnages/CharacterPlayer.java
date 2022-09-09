@@ -13,8 +13,8 @@ public abstract class CharacterPlayer implements Combattants {
     private EquipementOffensif attackObject;
     private EquipementDefensif defendObject;
 
-    public CharacterPlayer(int power, int life, String name, String type, EquipementOffensif attackObject, EquipementDefensif defendObject) {
-        this.position = 1;
+    public CharacterPlayer(int power, int life, String name, String type, EquipementOffensif attackObject, EquipementDefensif defendObject, int position) {
+        this.position = position;
         this.power = power;
         this.life = life;
         this.name = name;

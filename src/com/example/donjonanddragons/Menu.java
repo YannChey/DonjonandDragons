@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu implements CaisseInteractions, ArmeInteractions {
-    Scanner myObj = new Scanner(System.in);
+    private final Scanner myObj = new Scanner(System.in);
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    DBUse dbUse = new DBUse();
-    int id;
+    private final DBUse dbUse = new DBUse();
+    private int id;
 
     public void displayWelcome() {
         System.out.println(ANSI_RED + "Bienvenue dans notre nouveau jeu Donjons et Dragons !" + ANSI_RESET);
@@ -94,10 +94,18 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         String name = getCharacterType();
         CharacterPlayer characterPlayer = instanceCharacterType(name);
         try {
-            Statement st = dbUse.connectToDBB();
-            st.executeUpdate("INSERT INTO `hero`(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`) " +
-                    "VALUES ('" + name + "','" + characterPlayer.getName() + "','" + characterPlayer.getLife() + "','"
-                    + characterPlayer.getPower() + "','" + characterPlayer.getAttackObject().getName() + "','" + characterPlayer.getDefendObject().getName() + "')");
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("INSERT INTO Hero(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`) values (?,?,?,?,?,?)");
+            stmt.setString(1,name);
+            stmt.setString(2,characterPlayer.getName());
+            stmt.setInt(3,characterPlayer.getLife());
+            stmt.setInt(4,characterPlayer.getPower());
+            stmt.setString(5,characterPlayer.getAttackObject().getName());
+            stmt.setString(6,characterPlayer.getDefendObject().getName());
+            stmt.executeUpdate();
+//            Statement st = dbUse.connectToDBB();
+//            st.executeUpdate("INSERT INTO `hero`(`Type`, `Nom`, `NiveauVie`, `NiveauForce`, `Weapon`, `Bouclier`) " +
+//                    "VALUES ('" + name + "','" + characterPlayer.getName() + "','" + characterPlayer.getLife() + "','"
+//                    + characterPlayer.getPower() + "','" + characterPlayer.getAttackObject().getName() + "','" + characterPlayer.getDefendObject().getName() + "')");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -124,8 +132,11 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
     public EquipementOffensif equipementOffensif(int id) {
         EquipementOffensif equipementOffensif1 = null;
         try {
-            Statement st = dbUse.connectToDBB();
-            ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE ID = " + id + "");
+//            Statement st = dbUse.connectToDBB();
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("SELECT * FROM hero WHERE Id = ?");
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
+//            ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE ID = " + id + "");
             while (rs.next()) {
                 if (rs.getString("Weapon").equals("une epee")) {
                     equipementOffensif1 = new Epee();
@@ -148,8 +159,9 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
     public EquipementDefensif equipementDefensif(int id) {
         EquipementDefensif equipementDefensif = null;
         try {
-            Statement st = dbUse.connectToDBB();
-            ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE ID = " + id + "");
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("SELECT * FROM hero WHERE Id = ?");
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 if (rs.getString("Bouclier").equals("Bouclier")) {
                     equipementDefensif = new Bouclier();
@@ -166,8 +178,9 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
     public CharacterPlayer getCharacterFromDBB(int id) {
         CharacterPlayer characterPlayer = null;
         try {
-            Statement st = dbUse.connectToDBB();
-            ResultSet rs = st.executeQuery("SELECT * FROM hero WHERE Id = " + id + "");
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("SELECT * FROM hero WHERE Id = ?");
+            stmt.setInt(1,id);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 System.out.println("Votre personnage : " + rs.getString("Id") + " de type : " + rs.getString("Type") +
                         " qui a comme nom : " + rs.getString("Nom") + " d'un niveau de vie de : " + rs.getString("NiveauVie")
@@ -191,8 +204,11 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
 
     public void removeCharacterFromBDD(int id){
         try {
-            Statement st = dbUse.connectToDBB();
-            st.executeUpdate("DELETE FROM `hero` WHERE Id = " + id + "");
+//            Statement st = dbUse.connectToDBB().createStatement();
+//            st.executeUpdate("DELETE FROM `hero` WHERE Id = " + id + "");
+            PreparedStatement stmt = dbUse.connectToDBB().prepareStatement("DELETE FROM Hero WHERE Id = ?");
+            stmt.setInt(1,id);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -266,7 +282,7 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
         System.out.println("Veuillez maintenant definir un nom pour votre heros");
         characterName = myObj.nextLine();
         try {
-            Statement st = dbUse.connectToDBB();
+            Statement st = dbUse.connectToDBB().createStatement();
             st.executeUpdate("UPDATE Hero SET `Nom` = '" + characterName + "' WHERE ID = " + id + "");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -366,6 +382,10 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
 
     public void youFear(int dices, CharacterPlayer perso1){
         System.out.println("Vous avez fuit et reculez de " + dices + " vous etes a la case " + perso1.getPosition());
+    }
+
+    public int getId() {
+        return id;
     }
 }
 

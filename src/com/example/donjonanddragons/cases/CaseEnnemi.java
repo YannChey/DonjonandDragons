@@ -5,6 +5,8 @@ import com.example.donjonanddragons.inter.FightInteractions;
 import com.example.donjonanddragons.ennemis.Ennemi;
 import com.example.donjonanddragons.personnages.CharacterPlayer;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -13,14 +15,12 @@ import java.util.ArrayList;
  * Déclaration des attributs de ma classe CaseEnnemi
  */
 public class CaseEnnemi extends Case {
-    Ennemi ennemi;
-    FightInteractions fightInteractions;
-    boolean isNowEmpty;
-    boolean didYouComeBack = false;
-
-    boolean areYouDead = false;
-
-    ConnectionDBBInterface connectionDBBInterface;
+    private final Ennemi ennemi;
+    private final FightInteractions fightInteractions;
+    private boolean isNowEmpty;
+    private boolean didYouComeBack = false;
+    private boolean areYouDead = false;
+    private final ConnectionDBBInterface connectionDBBInterface;
 
     /**
      * Constructeur de ma class CaseEnnemi
@@ -54,10 +54,6 @@ public class CaseEnnemi extends Case {
      * areYouDead pour vérifier si le personnage n'est pas mort, et didYouComeBack pour vérifier si le personnage n'a pas fuit le combat.
      * @param character
      */
-    @Override
-    public void interaction(CharacterPlayer character) {
-
-    }
 
     @Override
     public void interaction(CharacterPlayer character, int id) {
@@ -107,8 +103,12 @@ public class CaseEnnemi extends Case {
 
     public void updateLifeInBDD(CharacterPlayer characterPlayer, int id){
         try {
-            Statement st= connectionDBBInterface.connectToDBB();
-            st.executeUpdate("UPDATE Hero SET `NiveauVie` = '"+ characterPlayer.getLife() +"' WHERE ID = "+ id +"");
+//            Statement st= connectionDBBInterface.connectToDBB().createStatement();
+//            st.executeUpdate("UPDATE Hero SET `NiveauVie` = '"+ characterPlayer.getLife() +"' WHERE ID = "+ id +"");
+            PreparedStatement stmt = connectionDBBInterface.connectToDBB().prepareStatement("UPDATE Hero SET `NiveauVie` = ? WHERE Id = ?");
+            stmt.setInt(1,characterPlayer.getLife());
+            stmt.setInt(2,id);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

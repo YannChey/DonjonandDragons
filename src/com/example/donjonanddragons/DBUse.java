@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBUse implements ConnectionDBBInterface {
-    public Statement connectToDBB(){
-        Connection cn = null;
+
+    public Connection connectToDBB(){
         try {
-            cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/donjons_and_dragons", "yannche", "alerteauxgogols");
-            Statement st = cn.createStatement();
-            return st;
+            Connection cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/donjons_and_dragons", "yannche", "alerteauxgogols");
+            return cn;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -21,7 +20,7 @@ public class DBUse implements ConnectionDBBInterface {
     public int takeIdFromBDD(){
         ArrayList<Integer> IdList = new ArrayList<>();
         try {
-            Statement st = connectToDBB();
+            Statement st = connectToDBB().createStatement();
             ResultSet rs = st.executeQuery("SELECT `Id` FROM hero");
             while (rs.next()) {
                 IdList.add(Integer.valueOf(rs.getString("Id")));
@@ -36,7 +35,7 @@ public class DBUse implements ConnectionDBBInterface {
     public List displayCharactersFromBDD() {
         ArrayList<Integer> IdList = new ArrayList<>();
         try {
-            Statement st = connectToDBB();
+            Statement st = connectToDBB().createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM hero");
             while (rs.next()) {
                 System.out.println("Votre personnage : " + rs.getString("Id") + " de type : " + rs.getString("Type") +
