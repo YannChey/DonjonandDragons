@@ -11,11 +11,14 @@ import com.example.donjonanddragons.personnages.CharacterPlayer;
 import com.example.donjonanddragons.personnages.Guerrier;
 import com.example.donjonanddragons.personnages.Magician;
 
+import javax.print.attribute.IntegerSyntax;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.Integer.parseInt;
 
 public class Menu implements CaisseInteractions, ArmeInteractions {
     private final Scanner myObj = new Scanner(System.in);
@@ -24,6 +27,8 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
     public static final String ANSI_BLUE = "\u001B[34m";
     private final DBUse dbUse = new DBUse();
     private int id;
+
+    private String mesBoules;
 
     public void displayWelcome() {
         System.out.println(ANSI_RED + "Bienvenue dans notre nouveau jeu Donjons et Dragons !" + ANSI_RESET);
@@ -117,15 +122,24 @@ public class Menu implements CaisseInteractions, ArmeInteractions {
 
     public int selectCharacterFromBDD(List idList) {
         System.out.println("Pour commencer, sélectionner le personnage que vous souhaitez jouer (rentrez le numero de votre sauvegarde)");
-        this.id = Integer.parseInt(myObj.nextLine());
-        while (!idList.contains(this.id)) {
+        this.id = parseInt(myObj.nextLine());
+        while (!idList.contains(this.id) && !tryParseInt(myObj.nextLine())) {
             System.out.println(ANSI_RED + "Vous devez choisir une sauvegarde existante ! " + ANSI_RESET);
             try {
-                this.id = Integer.parseInt(myObj.nextLine());
+                this.id = parseInt(myObj.nextLine());
             } catch (InputMismatchException e) {
             }
         }
         return this.id;
+    }
+
+    public boolean tryParseInt(String toTest){
+        try{
+            Integer.parseInt(toTest);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     //Instancier un character déjà dans la BDD

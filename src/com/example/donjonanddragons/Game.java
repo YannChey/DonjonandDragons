@@ -76,9 +76,9 @@ public class Game {
         if(perso1.getPosition() == 1) {
             generateBoard();
         }
-        for (Case aCase : plateau) {
-            System.out.println(aCase.getClass().getName());
-        }
+//        for (Case aCase : plateau) {
+//            System.out.println(aCase.getClass().getName());
+//        }
         menu.startPhrase();
         this.state = GameState.JEU;
     }
